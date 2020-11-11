@@ -1,1 +1,1 @@
-# gamified-marketing-app
+# Gamified Marketing App
