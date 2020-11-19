@@ -1,0 +1,7 @@
+INDEX VERSION 1.4+C:\gamified-marketing-app\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+154674953.index
+3540831649.index
+2500399087.index
+3435534848.index
+527344422.index
+196703693.index
