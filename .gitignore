@@ -1,2 +1,6 @@
-.metadata/
-.git/
+/.metadata/
+/.git/
+/libraries/
+/RemoteSystemsTempFiles/
+/Servers/
+/.gitignore
