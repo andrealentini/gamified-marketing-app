@@ -12,7 +12,13 @@
 	</div>
 	<h1>Gamified Marketing App Home Page</h1>
 	<p
-		th:text="${'You logged in as ' + session.user.role.name}"></p>
+		th:text="${'Welcome back' + (session.user.name != null ? ', ' + session.user.name : '') + '. You logged in as ' + session.user.role.name + '.'}"></p>
+	<div>
+		<h3>Product of the day</h3>
+		<div class="round_box_container">
+			<h3>Product of the day</h3>
+		</div>
+	</div>
 
 </body>
 </html>
