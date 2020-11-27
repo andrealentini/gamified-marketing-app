@@ -4,3 +4,8 @@
 /RemoteSystemsTempFiles/
 /Servers/
 /.gitignore
+/.DS_Store
+/GamifiedMarketingAppWEB/src/META-INF/
+/GamifiedMarketingAppWEB/src/it/polimi/.DS_Store
+/resources/.DS_Store
+/resources/scripts/.DS_Store
