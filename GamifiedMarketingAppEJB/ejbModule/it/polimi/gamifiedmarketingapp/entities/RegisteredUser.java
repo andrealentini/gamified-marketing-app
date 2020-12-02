@@ -17,6 +17,8 @@ public class RegisteredUser implements Serializable {
 	private String username;
 
 	private String password;
+	
+	private String email;
 
 	private String name;
 
@@ -86,6 +88,14 @@ public class RegisteredUser implements Serializable {
 		this.role = role;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -110,8 +120,8 @@ public class RegisteredUser implements Serializable {
 
 	@Override
 	public String toString() {
-		return "RegisteredUser [id=" + id + ", username=" + username + ", password=" + password + ", name=" + name
-				+ ", surname=" + surname + ", blocked=" + blocked + ", role=" + role + "]";
+		return "RegisteredUser [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email
+				+ ", name=" + name + ", surname=" + surname + ", blocked=" + blocked + ", role=" + role + "]";
 	}
 		
 }
