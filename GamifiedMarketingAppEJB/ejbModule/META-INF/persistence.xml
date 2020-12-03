@@ -3,6 +3,9 @@
 	<persistence-unit name="GamifiedMarketingAppEJB">
 		<jta-data-source>GamifiedMarketingAppDataSource</jta-data-source>
 		<class>it.polimi.gamifiedmarketingapp.entities.Product</class>
+		<class>it.polimi.gamifiedmarketingapp.entities.Question</class>
+		<class>it.polimi.gamifiedmarketingapp.entities.QuestionChoice</class>
+		<class>it.polimi.gamifiedmarketingapp.entities.Questionnaire</class>
 		<class>it.polimi.gamifiedmarketingapp.entities.RegisteredUser</class>
 		<class>it.polimi.gamifiedmarketingapp.entities.Review</class>
 		<class>it.polimi.gamifiedmarketingapp.entities.Role</class>

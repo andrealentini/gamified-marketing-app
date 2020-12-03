@@ -75,6 +75,7 @@ public class Product implements Serializable {
 	}
 
 	public void addReview(Review review) {
+		/*TODO: check order of operations*/
 		getReviews().add(review);
 		review.setProduct(this);
 	}
