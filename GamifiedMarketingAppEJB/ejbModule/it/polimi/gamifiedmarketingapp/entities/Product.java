@@ -2,6 +2,7 @@ package it.polimi.gamifiedmarketingapp.entities;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Basic;
@@ -12,11 +13,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "product", schema = "gamified_marketing_app_db")
+@NamedQueries({
+	@NamedQuery(name = "Product.findByDate", query = "SELECT p FROM Product p WHERE p.date = :date"),
+})
 public class Product implements Serializable {
 
 	private static final long serialVersionUID = -6194293176038889235L;
@@ -26,6 +34,9 @@ public class Product implements Serializable {
 	private int id;
 	
 	private String name;
+	
+	@Temporal(TemporalType.DATE)	//Annotation used to store the date as an actual date and not as timestamp
+	private Date date;
 	
 	@Basic(fetch = FetchType.LAZY)	//Basic annotation to define fetch policy
 	@Lob	//To define a field that maps as BLOB in the database
@@ -70,6 +81,18 @@ public class Product implements Serializable {
 		this.picture = picture;
 	}
 	
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public void setReviews(List<Review> reviews) {
+		this.reviews = reviews;
+	}
+
 	public List<Review> getReviews() {
 		return this.reviews;
 	}
@@ -108,7 +131,8 @@ public class Product implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", name=" + name + ", picture=" + Arrays.toString(picture) + "]";
+		return "Product [id=" + id + ", name=" + name + ", date=" + date + ", picture=" + Arrays.toString(picture)
+				+ ", reviews=" + reviews + "]";
 	}
 
 }

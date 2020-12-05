@@ -22,17 +22,14 @@ public class QuestionChoice implements Serializable {
 	
 	private String text;
 	
-	private int order;
-	
 	@ManyToOne
 	@JoinColumn(name = "question")
 	private Question question;
 
 	public QuestionChoice() {}
 
-	public QuestionChoice(String text, int order, Question question) {
+	public QuestionChoice(String text, Question question) {
 		this.text = text;
-		this.order = order;
 		this.question = question;
 	}
 
@@ -50,14 +47,6 @@ public class QuestionChoice implements Serializable {
 
 	public void setText(String text) {
 		this.text = text;
-	}
-
-	public int getOrder() {
-		return order;
-	}
-
-	public void setOrder(int order) {
-		this.order = order;
 	}
 
 	public Question getQuestion() {
@@ -92,7 +81,7 @@ public class QuestionChoice implements Serializable {
 
 	@Override
 	public String toString() {
-		return "QuestionChoice [id=" + id + ", text=" + text + ", order=" + order + ", question=" + question + "]";
+		return "QuestionChoice [id=" + id + ", text=" + text + ", question=" + question + "]";
 	}
 
 }

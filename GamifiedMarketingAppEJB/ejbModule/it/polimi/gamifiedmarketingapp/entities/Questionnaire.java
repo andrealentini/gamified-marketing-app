@@ -1,7 +1,6 @@
 package it.polimi.gamifiedmarketingapp.entities;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,8 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "questionnaire", schema = "gamified_marketing_app_db")
@@ -25,19 +22,15 @@ public class Questionnaire implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@Temporal(TemporalType.DATE)	//Annotation used to store the date as an actual date and not as timestamp
-	private Date date;
-	
-	private boolean type;
+	private boolean isMarketing;
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "questionnaire", cascade = CascadeType.ALL)
 	private List<Question> questions;
 
 	public Questionnaire() {}
 
-	public Questionnaire(Date date, boolean type) {
-		this.date = date;
-		this.type = type;
+	public Questionnaire(boolean isMarketing) {
+		this.isMarketing = isMarketing;
 	}
 
 	public int getId() {
@@ -48,20 +41,12 @@ public class Questionnaire implements Serializable {
 		this.id = id;
 	}
 
-	public Date getDate() {
-		return date;
+	public boolean isMarketing() {
+		return isMarketing;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-	public boolean isType() {
-		return type;
-	}
-
-	public void setType(boolean type) {
-		this.type = type;
+	public void setIsMarketing(boolean isMarketing) {
+		this.isMarketing = isMarketing;
 	}
 	
 	public List<Question> getQuestions() {
@@ -105,7 +90,7 @@ public class Questionnaire implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Questionnaire [id=" + id + ", date=" + date + ", type=" + type + ", questions=" + questions + "]";
+		return "Questionnaire [id=" + id + ", isMarketing=" + isMarketing + ", questions=" + questions + "]";
 	}
 	
 }

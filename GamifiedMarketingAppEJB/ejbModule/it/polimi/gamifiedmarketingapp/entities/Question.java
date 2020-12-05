@@ -28,8 +28,6 @@ public class Question implements Serializable {
 	
 	private boolean optional;
 	
-	private int order;
-	
 	private int range;
 	
 	@ManyToOne
@@ -41,11 +39,9 @@ public class Question implements Serializable {
 
 	public Question() {}
 
-	public Question(String text, boolean optional, int order, int range, Questionnaire questionnaire,
-			List<QuestionChoice> questionChoices) {
+	public Question(String text, boolean optional, int range, Questionnaire questionnaire) {
 		this.text = text;
 		this.optional = optional;
-		this.order = order;
 		this.range = range;
 		this.questionnaire = questionnaire;
 	}
@@ -72,14 +68,6 @@ public class Question implements Serializable {
 
 	public void setOptional(boolean optional) {
 		this.optional = optional;
-	}
-
-	public int getOrder() {
-		return order;
-	}
-
-	public void setOrder(int order) {
-		this.order = order;
 	}
 
 	public int getRange() {
@@ -139,7 +127,7 @@ public class Question implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Question [id=" + id + ", text=" + text + ", optional=" + optional + ", order=" + order + ", range="
+		return "Question [id=" + id + ", text=" + text + ", optional=" + optional + ", range="
 				+ range + ", questionnaire=" + questionnaire + "]";
 	}
 
