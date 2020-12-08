@@ -1,10 +1,10 @@
 package it.polimi.gamifiedmarketingapp.exceptions;
 
-public class QuestionnaireIntegrityException extends RuntimeException {
+public class IntegrityException extends RuntimeException {
 
 	private static final long serialVersionUID = 1736056078042223578L;
 
-	public QuestionnaireIntegrityException(String message) {
+	public IntegrityException(String message) {
 		super(message);
 	}
 	

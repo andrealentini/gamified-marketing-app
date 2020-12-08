@@ -7,8 +7,8 @@ import javax.persistence.PersistenceContext;
 import it.polimi.gamifiedmarketingapp.entities.Product;
 import it.polimi.gamifiedmarketingapp.entities.RegisteredUser;
 import it.polimi.gamifiedmarketingapp.entities.Review;
+import it.polimi.gamifiedmarketingapp.exceptions.EntryNotFoundException;
 import it.polimi.gamifiedmarketingapp.exceptions.FieldLengthException;
-import it.polimi.gamifiedmarketingapp.exceptions.UserNotFoundException;
 
 @Stateless
 public class ReviewService {
@@ -34,10 +34,10 @@ public class ReviewService {
 			throw new IllegalArgumentException("Project ID can't be negative");
 		RegisteredUser registeredUser = em.find(RegisteredUser.class, registeredUserId);
 		if (registeredUser == null)
-			throw new UserNotFoundException("Registered user not found");
+			throw new EntryNotFoundException("Registered user not found");
 		Product product = em.find(Product.class, productId);
 		if (product == null)
-			throw new UserNotFoundException("Product not found");
+			throw new EntryNotFoundException("Product not found");
 		Review review = new Review(title, text, registeredUser, product);
 		product.addReview(review);
 		em.persist(review);

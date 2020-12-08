@@ -12,9 +12,11 @@ public class QuestionnaireService {
 	@PersistenceContext(unitName = "GamifiedMarketingAppEJB")
 	private EntityManager em;
 	
-	public void createQuestionnaire(boolean isMarketing) {
+	public int createQuestionnaire(boolean isMarketing) {
 		Questionnaire questionnaire = new Questionnaire(isMarketing);
 		em.persist(questionnaire);
+		em.flush();
+		return questionnaire.getId();
 	}
 
 }

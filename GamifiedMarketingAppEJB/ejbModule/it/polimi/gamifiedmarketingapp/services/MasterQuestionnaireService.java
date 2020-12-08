@@ -11,8 +11,8 @@ import it.polimi.gamifiedmarketingapp.entities.MasterQuestionnaire;
 import it.polimi.gamifiedmarketingapp.entities.Product;
 import it.polimi.gamifiedmarketingapp.entities.Questionnaire;
 import it.polimi.gamifiedmarketingapp.exceptions.EntryNotFoundException;
+import it.polimi.gamifiedmarketingapp.exceptions.IntegrityException;
 import it.polimi.gamifiedmarketingapp.exceptions.NonUniqueEntryException;
-import it.polimi.gamifiedmarketingapp.exceptions.QuestionnaireIntegrityException;
 
 @Stateless
 public class MasterQuestionnaireService {
@@ -33,7 +33,7 @@ public class MasterQuestionnaireService {
 	
 	public void createMasterQuestionnaire(int marketingSectionId, int statisticalSectionId, int productId) {
 		if (marketingSectionId == statisticalSectionId)
-			throw new QuestionnaireIntegrityException("Marketing and statistical exception can't be the same objects");
+			throw new IntegrityException("Marketing and statistical exception can't be the same objects");
 		Questionnaire marketingSection = em.find(Questionnaire.class, marketingSectionId);
 		if (marketingSection == null)
 			throw new EntryNotFoundException("Marketing section not found");
@@ -41,9 +41,9 @@ public class MasterQuestionnaireService {
 		if (statisticalSection == null)
 			throw new EntryNotFoundException("Statistical section not found");
 		if (!marketingSection.isMarketing())
-			throw new QuestionnaireIntegrityException("Marketing section must correspond to a marketing questionnaire");
+			throw new IntegrityException("Marketing section must correspond to a marketing questionnaire");
 		if (statisticalSection.isMarketing())
-			throw new QuestionnaireIntegrityException("Statistical section must correspond to a statistical questionnaire");
+			throw new IntegrityException("Statistical section must correspond to a statistical questionnaire");
 		Product product = em.find(Product.class, productId);
 		if (product == null)
 			throw new EntryNotFoundException("Product not found");
@@ -52,6 +52,7 @@ public class MasterQuestionnaireService {
 			throw new NonUniqueEntryException("Product already linked to a master questionnaire");
 		MasterQuestionnaire masterQuestionnaire = new MasterQuestionnaire(marketingSection, statisticalSection, product);
 		em.persist(masterQuestionnaire);
+		product.setMasterQuestionnaire(masterQuestionnaire);
 	}
 	
 }

@@ -10,8 +10,8 @@ import javax.persistence.PersistenceContext;
 
 import it.polimi.gamifiedmarketingapp.entities.Product;
 import it.polimi.gamifiedmarketingapp.exceptions.DateException;
+import it.polimi.gamifiedmarketingapp.exceptions.EntryNotFoundException;
 import it.polimi.gamifiedmarketingapp.exceptions.FieldLengthException;
-import it.polimi.gamifiedmarketingapp.exceptions.ProductNotFoundException;
 
 @Stateless	//Stateless Java Bean that doesn't mantain or depend to session information
 public class ProductService {
@@ -36,7 +36,7 @@ public class ProductService {
 		throw new NonUniqueResultException("More than one product with the same date");		
 	}
 	
-	public void createProduct(String name, Date date) {
+	public int createProduct(String name, Date date) {
 		if (name == null)
 			throw new IllegalArgumentException("Product name can't be null");
 		if (name.length() > PRODUCT_NAME_LENGTH)
@@ -48,8 +48,10 @@ public class ProductService {
 		Product queriedProduct = this.findProductByDate(date);
 		if (queriedProduct != null)
 			throw new DateException("Can't save two products with the same date");
-		Product product = new Product(name);
+		Product product = new Product(name, date);
 		em.persist(product);
+		em.flush();
+		return product.getId();
 	}
 	
 	public void setProductPicture(int productId, byte[] picture) {
@@ -59,7 +61,7 @@ public class ProductService {
 			throw new IllegalArgumentException("Product picture can't be null");
 		Product product = em.find(Product.class, productId);
 		if (product == null)
-			throw new ProductNotFoundException("Product not found");
+			throw new EntryNotFoundException("Product not found");
 		product.setPicture(picture);
 	}
 	

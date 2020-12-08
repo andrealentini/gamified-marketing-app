@@ -16,6 +16,7 @@ import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -45,16 +46,20 @@ public class Product implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL)
 	private List<Review> reviews;
 	
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL)
+	private MasterQuestionnaire masterQuestionnaire;
+	
 	public Product() {}
 
-	public Product(int id, String name, byte[] picture) {
-		this.id = id;
+	public Product(String name, Date date, byte[] picture) {
 		this.name = name;
+		this.date = date;
 		this.picture = picture;
 	}
 	
-	public Product(String name) {
+	public Product(String name, Date date) {
 		this.name = name;
+		this.date = date;
 	}
 
 	public int getId() {
@@ -95,6 +100,14 @@ public class Product implements Serializable {
 
 	public List<Review> getReviews() {
 		return this.reviews;
+	}
+	
+	public void setMasterQuestionnaire(MasterQuestionnaire masterQuestionnaire) {
+		this.masterQuestionnaire = masterQuestionnaire;
+	}
+
+	public MasterQuestionnaire getMasterQuestionnaire() {
+		return masterQuestionnaire;
 	}
 
 	public void addReview(Review review) {

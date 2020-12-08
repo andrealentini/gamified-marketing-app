@@ -28,13 +28,23 @@ public class FacadeService {
 	
 	public void createDailyEntry(Date date, String productName, byte[] productPicture,
 			int statisticalSectionId, List<QuestionWrapper> questions) {
-		productService.createProduct(productName, date);
+		int productId = productService.createProduct(productName, date);
 		if (productPicture != null)
 			productService.setProductPicture(productService.findProductByDate(date).getId(), productPicture);
-		questionnaireService.createQuestionnaire(true);
+		int questionnaireId = questionnaireService.createQuestionnaire(true);
 		for (QuestionWrapper questionWrapper : questions) {
-			//questionService.createQuestion(questionWrapper.getText(), questionWrapper.isOptional(), questionnaireId);
+			int range = questionWrapper.getRange();
+			int questionId = 
+					range == 0 ?
+					questionService.createQuestion(questionWrapper.getText(), questionWrapper.isOptional(), questionnaireId) :
+					questionService.createRangedQuestion(questionWrapper.getText(), questionWrapper.isOptional(), range, questionnaireId);
+			List<String> choices = questionWrapper.getChoices();
+			if (choices != null) {
+				for (String choice : choices)
+					questionChoiceService.createQuestionChoice(choice, questionId);
+			}
 		}
+		masterQuestionnaireService.createMasterQuestionnaire(questionnaireId, statisticalSectionId, productId);
 	}
 	
 }

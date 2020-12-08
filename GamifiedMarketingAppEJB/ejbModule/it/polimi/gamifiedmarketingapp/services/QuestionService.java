@@ -6,8 +6,8 @@ import javax.persistence.PersistenceContext;
 
 import it.polimi.gamifiedmarketingapp.entities.Question;
 import it.polimi.gamifiedmarketingapp.entities.Questionnaire;
+import it.polimi.gamifiedmarketingapp.exceptions.EntryNotFoundException;
 import it.polimi.gamifiedmarketingapp.exceptions.FieldLengthException;
-import it.polimi.gamifiedmarketingapp.exceptions.QuestionnaireNotFoundException;
 import it.polimi.gamifiedmarketingapp.exceptions.RangeOutOfBoundException;
 
 @Stateless
@@ -25,24 +25,28 @@ public class QuestionService {
 			throw new FieldLengthException("Question text too long");
 		Questionnaire questionnaire = em.find(Questionnaire.class, questionnaireId);
 		if (questionnaire == null)
-			throw new QuestionnaireNotFoundException("Questionnaire not found");
+			throw new EntryNotFoundException("Questionnaire not found");
 		Question question = new Question(text, optional, 0, questionnaire);
 		return question;
 	}
 	
-	public void createQuestion(String text, boolean optional, int questionnaireId) {
+	public int createQuestion(String text, boolean optional, int questionnaireId) {
 		Question question = this.assembleQuestion(text, optional, questionnaireId);
 		question.getQuestionnaire().addQuestion(question);
 		em.persist(question);
+		em.flush();
+		return question.getId();
 	}
 	
-	public void createRangedQuestion(String text, boolean optional, int range, int questionnaireId) {
+	public int createRangedQuestion(String text, boolean optional, int range, int questionnaireId) {
 		if (range <= 0)
 			throw new RangeOutOfBoundException("Range upper bound can't be negative or equal to 0");
 		Question question = this.assembleQuestion(text, optional, questionnaireId);
 		question.setRange(range);
 		question.getQuestionnaire().addQuestion(question);
 		em.persist(question);
+		em.flush();
+		return question.getId();
 	}
 	
 }
