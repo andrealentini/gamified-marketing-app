@@ -32,7 +32,7 @@ public class Product implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	
 	private String name;
 	
@@ -43,10 +43,10 @@ public class Product implements Serializable {
 	@Lob	//To define a field that maps as BLOB in the database
 	private byte[] picture;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.REMOVE)
 	private List<Review> reviews;
 	
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.REMOVE)
 	private MasterQuestionnaire masterQuestionnaire;
 	
 	public Product() {}
@@ -62,11 +62,11 @@ public class Product implements Serializable {
 		this.date = date;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -122,8 +122,8 @@ public class Product implements Serializable {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
+		final Integer prime = 31;
+		Integer result = 1;
 		result = prime * result + id;
 		return result;
 	}

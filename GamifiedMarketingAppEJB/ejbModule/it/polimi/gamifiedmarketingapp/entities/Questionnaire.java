@@ -20,32 +20,32 @@ public class Questionnaire implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	
-	private boolean isMarketing;
+	private Boolean isMarketing;
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "questionnaire", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "questionnaire", cascade = CascadeType.REMOVE)
 	private List<Question> questions;
 
 	public Questionnaire() {}
 
-	public Questionnaire(boolean isMarketing) {
+	public Questionnaire(Boolean isMarketing) {
 		this.isMarketing = isMarketing;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public boolean isMarketing() {
+	public Boolean isMarketing() {
 		return isMarketing;
 	}
 
-	public void setIsMarketing(boolean isMarketing) {
+	public void setIsMarketing(Boolean isMarketing) {
 		this.isMarketing = isMarketing;
 	}
 	
@@ -68,8 +68,8 @@ public class Questionnaire implements Serializable {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
+		final Integer prime = 31;
+		Integer result = 1;
 		result = prime * result + id;
 		return result;
 	}

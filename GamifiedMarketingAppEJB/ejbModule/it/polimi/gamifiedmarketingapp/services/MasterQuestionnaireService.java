@@ -20,7 +20,16 @@ public class MasterQuestionnaireService {
 	@PersistenceContext(unitName = "GamifiedMarketingAppEJB")
 	private EntityManager em;
 	
-	public MasterQuestionnaire findMasterQuestionnaireByProduct(int productId) {
+	public MasterQuestionnaire findMasterQuestionnaireById(Integer masterQuestionnaireId) {
+		if (masterQuestionnaireId == null)
+			throw new IllegalArgumentException("Master questionnaire ID can't be null");
+		MasterQuestionnaire masterQuestionnaire = em.find(MasterQuestionnaire.class, masterQuestionnaireId);
+		return masterQuestionnaire;
+	}
+	
+	public MasterQuestionnaire findMasterQuestionnaireByProduct(Integer productId) {
+		if (productId == null)
+			throw new IllegalArgumentException("Product ID can't be null");
 		List<MasterQuestionnaire> masterQuestionnaires = em.createNamedQuery("MasterQuestionnaire.findByProduct", MasterQuestionnaire.class)
 				.setParameter("productId", productId)
 				.getResultList();
@@ -31,7 +40,13 @@ public class MasterQuestionnaireService {
 		throw new NonUniqueResultException("More than one master questionnaire with the same product");
 	}
 	
-	public void createMasterQuestionnaire(int marketingSectionId, int statisticalSectionId, int productId) {
+	public void createMasterQuestionnaire(Integer marketingSectionId, Integer statisticalSectionId, Integer productId) {
+		if (marketingSectionId == null)
+			throw new IllegalArgumentException("Marketing section ID can't be null");
+		if (statisticalSectionId == null)
+			throw new IllegalArgumentException("Statistical section ID can't be null");
+		if (productId == null)
+			throw new IllegalArgumentException("Product ID can't be null");
 		if (marketingSectionId == statisticalSectionId)
 			throw new IntegrityException("Marketing and statistical exception can't be the same objects");
 		Questionnaire marketingSection = em.find(Questionnaire.class, marketingSectionId);
@@ -51,8 +66,8 @@ public class MasterQuestionnaireService {
 		if (queriedMasterQuestionnaire != null)
 			throw new NonUniqueEntryException("Product already linked to a master questionnaire");
 		MasterQuestionnaire masterQuestionnaire = new MasterQuestionnaire(marketingSection, statisticalSection, product);
-		em.persist(masterQuestionnaire);
 		product.setMasterQuestionnaire(masterQuestionnaire);
+		em.persist(masterQuestionnaire);
 	}
 	
 }

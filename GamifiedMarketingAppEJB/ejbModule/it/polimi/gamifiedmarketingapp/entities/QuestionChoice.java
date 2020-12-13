@@ -18,7 +18,7 @@ public class QuestionChoice implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	
 	private String text;
 	
@@ -33,11 +33,11 @@ public class QuestionChoice implements Serializable {
 		this.question = question;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -59,8 +59,8 @@ public class QuestionChoice implements Serializable {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
+		final Integer prime = 31;
+		Integer result = 1;
 		result = prime * result + id;
 		return result;
 	}

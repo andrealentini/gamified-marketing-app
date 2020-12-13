@@ -22,11 +22,11 @@ public class Answer implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	
 	private String text;
 	
-	private int rangeValue;
+	private Integer rangeValue;
 	
 	@ManyToOne
 	@JoinColumn(name = "question")
@@ -36,7 +36,7 @@ public class Answer implements Serializable {
 	@JoinColumn(name = "filling")
 	private Filling filling;
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "answer", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "answer", cascade = CascadeType.REMOVE)
 	private List<AnswerChoice> answerChoices;
 
 	public Answer() {
@@ -47,11 +47,11 @@ public class Answer implements Serializable {
 		this.filling = filling;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -63,11 +63,11 @@ public class Answer implements Serializable {
 		this.text = text;
 	}
 
-	public int getRangeValue() {
+	public Integer getRangeValue() {
 		return rangeValue;
 	}
 
-	public void setRangeValue(int rangeValue) {
+	public void setRangeValue(Integer rangeValue) {
 		this.rangeValue = rangeValue;
 	}
 
@@ -106,8 +106,8 @@ public class Answer implements Serializable {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
+		final Integer prime = 31;
+		Integer result = 1;
 		result = prime * result + id;
 		return result;
 	}

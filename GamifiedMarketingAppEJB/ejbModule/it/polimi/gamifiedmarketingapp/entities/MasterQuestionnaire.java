@@ -28,9 +28,9 @@ public class MasterQuestionnaire implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	
-	@OneToOne
+	@OneToOne(cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "marketing_section")
 	private Questionnaire marketingSection;
 	
@@ -42,7 +42,7 @@ public class MasterQuestionnaire implements Serializable {
 	@JoinColumn(name = "product")
 	private Product product;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "masterQuestionnaire", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "masterQuestionnaire", cascade = CascadeType.REMOVE)
 	private List<Filling> fillings;
 	
 	public MasterQuestionnaire() {
@@ -54,11 +54,11 @@ public class MasterQuestionnaire implements Serializable {
 		this.product = product;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -105,8 +105,8 @@ public class MasterQuestionnaire implements Serializable {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
+		final Integer prime = 31;
+		Integer result = 1;
 		result = prime * result + id;
 		return result;
 	}

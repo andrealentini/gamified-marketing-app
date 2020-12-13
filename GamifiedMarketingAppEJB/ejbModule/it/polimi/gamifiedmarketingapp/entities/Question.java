@@ -22,35 +22,38 @@ public class Question implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	
 	private String text;
 	
-	private boolean optional;
+	private Boolean optional;
 	
-	private int range;
+	private Integer range;
+	
+	private Boolean multipleChoicesSupport;
 	
 	@ManyToOne
 	@JoinColumn(name = "questionnaire")
 	private Questionnaire questionnaire;
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "question", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "question", cascade = CascadeType.REMOVE)
 	private List<QuestionChoice> questionChoices;
 
 	public Question() {}
 
-	public Question(String text, boolean optional, int range, Questionnaire questionnaire) {
+	public Question(String text, Boolean optional, Integer range, Boolean multipleChoicesSupport, Questionnaire questionnaire) {
 		this.text = text;
 		this.optional = optional;
 		this.range = range;
+		this.multipleChoicesSupport = multipleChoicesSupport;
 		this.questionnaire = questionnaire;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -62,24 +65,28 @@ public class Question implements Serializable {
 		this.text = text;
 	}
 
-	public boolean isOptional() {
+	public Boolean isOptional() {
 		return optional;
 	}
 
-	public void setOptional(boolean optional) {
+	public void setOptional(Boolean optional) {
 		this.optional = optional;
 	}
 
-	public int getRange() {
+	public Integer getRange() {
 		return range;
 	}
 
-	public void setRange(int range) {
+	public void setRange(Integer range) {
 		this.range = range;
 	}
 
-	public Questionnaire getQuestionnaire() {
-		return questionnaire;
+	public Boolean isMultipleChoicesSupport() {
+		return multipleChoicesSupport;
+	}
+
+	public void setMultipleChoicesSupport(Boolean multipleChoicesSupport) {
+		this.multipleChoicesSupport = multipleChoicesSupport;
 	}
 
 	public void setQuestionnaire(Questionnaire questionnaire) {
@@ -94,6 +101,10 @@ public class Question implements Serializable {
 		this.questionChoices = questionChoices;
 	}
 	
+	public Questionnaire getQuestionnaire() {
+		return questionnaire;
+	}
+
 	public void addQuestionChoice(QuestionChoice questionChoice) {
 		getQuestionChoices().add(questionChoice);
 		questionChoice.setQuestion(this);
@@ -105,8 +116,8 @@ public class Question implements Serializable {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
+		final Integer prime = 31;
+		Integer result = 1;
 		result = prime * result + id;
 		return result;
 	}
@@ -127,8 +138,9 @@ public class Question implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Question [id=" + id + ", text=" + text + ", optional=" + optional + ", range="
-				+ range + ", questionnaire=" + questionnaire + "]";
+		return "Question [id=" + id + ", text=" + text + ", optional=" + optional + ", range=" + range
+				+ ", multipleChoicesSupport=" + multipleChoicesSupport + ", questionnaire=" + questionnaire
+				+ ", questionChoices=" + questionChoices + "]";
 	}
 
 }

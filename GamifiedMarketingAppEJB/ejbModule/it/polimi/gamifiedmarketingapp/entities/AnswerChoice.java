@@ -8,17 +8,22 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "answer", schema = "gamified_marketing_app_db")
+@NamedQueries({
+	@NamedQuery(name = "AnswerChoice.findByAnswerIdAndQuestionChoiceId", query = "SELECT ac FROM AnswerChoice ac WHERE ac.answer.id = :answerId AND ac.questionChoice.id = :questionChoiceId"),
+})
 public class AnswerChoice implements Serializable {
 
 	private static final long serialVersionUID = 416074754831877344L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	
 	@ManyToOne
 	@JoinColumn(name = "answer")
@@ -36,11 +41,11 @@ public class AnswerChoice implements Serializable {
 		this.questionChoice = questionChoice;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -62,8 +67,8 @@ public class AnswerChoice implements Serializable {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
+		final Integer prime = 31;
+		Integer result = 1;
 		result = prime * result + id;
 		return result;
 	}

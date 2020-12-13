@@ -12,7 +12,7 @@ public class RegisteredUser implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	
 	private String username;
 
@@ -24,7 +24,7 @@ public class RegisteredUser implements Serializable {
 
 	private String surname;
 	
-	private boolean blocked;
+	private Boolean blocked;
 	
 	@ManyToOne
 	@JoinColumn(name = "role")
@@ -32,11 +32,11 @@ public class RegisteredUser implements Serializable {
 
 	public RegisteredUser() {}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -72,11 +72,11 @@ public class RegisteredUser implements Serializable {
 		this.surname = surname;
 	}
 
-	public boolean isBlocked() {
+	public Boolean isBlocked() {
 		return blocked;
 	}
 
-	public void setBlocked(boolean blocked) {
+	public void setBlocked(Boolean blocked) {
 		this.blocked = blocked;
 	}
 
@@ -98,8 +98,8 @@ public class RegisteredUser implements Serializable {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
+		final Integer prime = 31;
+		Integer result = 1;
 		result = prime * result + id;
 		return result;
 	}

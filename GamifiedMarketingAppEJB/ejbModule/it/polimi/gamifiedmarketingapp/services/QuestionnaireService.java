@@ -12,7 +12,16 @@ public class QuestionnaireService {
 	@PersistenceContext(unitName = "GamifiedMarketingAppEJB")
 	private EntityManager em;
 	
-	public int createQuestionnaire(boolean isMarketing) {
+	public Questionnaire findQuestionnaireById(Integer questionnaireId) {
+		if (questionnaireId == null)
+			throw new IllegalArgumentException("Questionnaire ID can't be null");
+		Questionnaire questionnaire = em.find(Questionnaire.class, questionnaireId);
+		return questionnaire;
+	}
+	
+	public Integer createQuestionnaire(Boolean isMarketing) {
+		if (isMarketing == null)
+			throw new IllegalArgumentException("Marketing flag can't be null");
 		Questionnaire questionnaire = new Questionnaire(isMarketing);
 		em.persist(questionnaire);
 		em.flush();

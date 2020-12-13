@@ -9,16 +9,19 @@ public class QuestionWrapper implements Serializable {
 
 	private String text;
 	
-	private boolean optional;
+	private Boolean optional;
 	
-	private int range;
+	private Integer range;
+	
+	private Boolean multipleChoicesSupport;
 	
 	private List<String> choices;
 
-	public QuestionWrapper(String text, boolean optional, int range, List<String> choices) {
+	public QuestionWrapper(String text, Boolean optional, Boolean multipleChoicesSupport, Integer range, List<String> choices) {
 		this.text = text;
 		this.optional = optional;
 		this.range = range;
+		this.multipleChoicesSupport = multipleChoicesSupport;
 		this.choices = choices;
 	}
 
@@ -30,19 +33,19 @@ public class QuestionWrapper implements Serializable {
 		this.text = text;
 	}
 
-	public boolean isOptional() {
+	public Boolean isOptional() {
 		return optional;
 	}
 
-	public void setOptional(boolean optional) {
+	public void setOptional(Boolean optional) {
 		this.optional = optional;
 	}
 
-	public int getRange() {
+	public Integer getRange() {
 		return range;
 	}
 
-	public void setRange(int range) {
+	public void setRange(Integer range) {
 		this.range = range;
 	}
 
@@ -53,11 +56,19 @@ public class QuestionWrapper implements Serializable {
 	public void setChoices(List<String> choices) {
 		this.choices = choices;
 	}
+	
+	public Boolean isMultipleChoicesSupport() {
+		return multipleChoicesSupport;
+	}
+
+	public void setMultipleChoicesSupport(Boolean multipleChoicesSupport) {
+		this.multipleChoicesSupport = multipleChoicesSupport;
+	}
 
 	@Override
 	public String toString() {
-		return "QuestionWrapper [text=" + text + ", optional=" + optional + ", range=" + range + ", choices=" + choices
-				+ "]";
+		return "QuestionWrapper [text=" + text + ", optional=" + optional + ", range=" + range
+				+ ", multipleChoicesSupport=" + multipleChoicesSupport + ", choices=" + choices + "]";
 	}
 
 }

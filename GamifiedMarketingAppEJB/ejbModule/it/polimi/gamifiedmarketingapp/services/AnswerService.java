@@ -14,12 +14,23 @@ import it.polimi.gamifiedmarketingapp.exceptions.RangeOutOfBoundException;
 @Stateless
 public class AnswerService {
 	
-	private static final int TEXT_LENGTH = 500;
+	private static final Integer TEXT_LENGTH = 500;
 
 	@PersistenceContext(unitName = "GamifiedMarketingAppEJB")
 	private EntityManager em;
 	
-	private Answer assembleAnswer(int questionId, int fillingId) {
+	public Answer findAnswerById(Integer answerId) {
+		if (answerId == null)
+			throw new IllegalArgumentException("Answer ID can't be null");
+		Answer answer = em.find(Answer.class, answerId);
+		return answer;
+	}
+	
+	private Answer assembleAnswer(Integer questionId, Integer fillingId) {
+		if (questionId == null)
+			throw new IllegalArgumentException("Question ID can't be null");
+		if (fillingId == null)
+			throw new IllegalArgumentException("Filling ID can't be null");
 		Question question = em.find(Question.class, questionId);
 		if (question == null)
 			throw new EntryNotFoundException("Question not found");
@@ -30,27 +41,41 @@ public class AnswerService {
 		return answer;
 	}
 	
-	public int createTextAnswer(String text, int questionId, int fillingId) {
-		if (text == null || text.length() == 0)
-			throw new IllegalArgumentException("Answer text can't be null or empty");
-		if (text.length() > TEXT_LENGTH)
-			throw new FieldLengthException("Text too long");
+	public Integer createMultipleChoiceAnswer(Integer questionId, Integer fillingId) {
 		Answer answer = assembleAnswer(questionId, fillingId);
 		if (answer.getQuestion().getRange() > 0)
-			throw new UnsupportedOperationException("Can't answer with text to a ranged question");
-		answer.setText(text);
+			throw new UnsupportedOperationException("Can't answer with choices to a ranged question");
+		answer.getFilling().addAnswer(answer);
 		em.persist(answer);
 		em.flush();
 		return answer.getId();
 	}
 	
-	public int createRangedAnswer(int rangeValue, int questionId, int fillingId) {
-		if (rangeValue < 0)
+	public Integer createTextAnswer(String text, Integer questionId, Integer fillingId) {
+		if (text == null || text.length() == 0)
+			throw new IllegalArgumentException("Answer text can't be null or empty");
+		if (text.length() > TEXT_LENGTH)
+			throw new FieldLengthException("Text too long");
+		Answer answer = assembleAnswer(questionId, fillingId);
+		if (answer.getQuestion().getRange() != null)
+			throw new UnsupportedOperationException("Can't answer with text to a ranged question");
+		if (answer.getQuestion().isMultipleChoicesSupport() != null)
+			throw new UnsupportedOperationException("Can't answer with text to a multiple choice question");
+		answer.setText(text);
+		answer.getFilling().addAnswer(answer);
+		em.persist(answer);
+		em.flush();
+		return answer.getId();
+	}
+	
+	public Integer createRangedAnswer(Integer rangeValue, Integer questionId, Integer fillingId) {
+		if (rangeValue == null)
 			throw new RangeOutOfBoundException("Range upper bound can't be negative");
 		Answer answer = assembleAnswer(questionId, fillingId);
-		if (answer.getQuestion().getRange() == 0)
-			throw new UnsupportedOperationException("Can't answer with range to a text question");
+		if (answer.getQuestion().getRange() == null)
+			throw new UnsupportedOperationException("Can't answer with range to a non-ranged question");
 		answer.setRangeValue(rangeValue);
+		answer.getFilling().addAnswer(answer);
 		em.persist(answer);
 		em.flush();
 		return answer.getId();

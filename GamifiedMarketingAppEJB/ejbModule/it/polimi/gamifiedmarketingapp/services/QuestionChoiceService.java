@@ -12,12 +12,14 @@ import it.polimi.gamifiedmarketingapp.exceptions.FieldLengthException;
 @Stateless
 public class QuestionChoiceService {
 	
-	private static final int TEXT_LENGTH = 500;
+	private static final Integer TEXT_LENGTH = 500;
 	
 	@PersistenceContext(unitName = "GamifiedMarketingAppEJB")
 	private EntityManager em;
 	
-	public void createQuestionChoice(String text, int questionId) {
+	public void createQuestionChoice(String text, Integer questionId) {
+		if (questionId == null)
+			throw new IllegalArgumentException("Question ID can't be null");
 		if (text == null)
 			throw new IllegalArgumentException("Text can't be null");
 		if (text.length() > TEXT_LENGTH)

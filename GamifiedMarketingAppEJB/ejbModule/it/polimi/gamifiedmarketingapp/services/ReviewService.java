@@ -13,25 +13,25 @@ import it.polimi.gamifiedmarketingapp.exceptions.FieldLengthException;
 @Stateless
 public class ReviewService {
 	
-	private static int TITLE_LENGTH = 250;
-	private static int TEXT_LENGTH = 500;
+	private static Integer TITLE_LENGTH = 250;
+	private static Integer TEXT_LENGTH = 500;
 	
 	@PersistenceContext(unitName = "GamifiedMarketingAppEJB")
 	private EntityManager em;
 	
 	public ReviewService() {}
 	
-	public void addReview(String title, String text, int registeredUserId, int productId) {
+	public void addReview(String title, String text, Integer registeredUserId, Integer productId) {
+		if (registeredUserId == null)
+			throw new IllegalArgumentException("Registered user ID can't be null");
+		if (productId == null)
+			throw new IllegalArgumentException("Product ID can't be null");
 		if (title == null) 
 			throw new IllegalArgumentException("Title can't be null");
 		if (title.length() > TITLE_LENGTH)
 			throw new FieldLengthException("Title too long");
 		if (text != null && text.length() > TEXT_LENGTH)
 			throw new FieldLengthException("Text too long");
-		if (registeredUserId < 0)
-			throw new IllegalArgumentException("Registered user ID can't be negative");
-		if (productId < 0)
-			throw new IllegalArgumentException("Project ID can't be negative");
 		RegisteredUser registeredUser = em.find(RegisteredUser.class, registeredUserId);
 		if (registeredUser == null)
 			throw new EntryNotFoundException("Registered user not found");
@@ -43,9 +43,9 @@ public class ReviewService {
 		em.persist(review);
 	}
 	
-	public void removeReview(int reviewId) {
-		if (reviewId < 0)
-			throw new IllegalArgumentException("Review ID can't be negative");
+	public void removeReview(Integer reviewId) {
+		if (reviewId == null)
+			throw new IllegalArgumentException("Review ID can't be null");
 		Review review = em.find(Review.class, reviewId);
 		if (review == null)
 			throw new IllegalArgumentException("Review not found");

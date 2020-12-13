@@ -2,26 +2,35 @@ package it.polimi.gamifiedmarketingapp.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "filling", schema = "gamified_marketing_app_db")
+@NamedQueries({
+	@NamedQuery(name = "Filling.findByRegisteredUserIdAndMasterQuestionnaireId", query = "SELECT f FROM Filling f WHERE f.registeredUser.id = :registeredUserId AND f.masterQuestionnaire.id = :masterQuestionnaireId"),
+})
 public class Filling implements Serializable {
 	
 	private static final long serialVersionUID = 6705036418564375917L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	
 	@ManyToOne
 	@JoinColumn(name = "registered_user")
@@ -34,7 +43,10 @@ public class Filling implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date timestamp;
 	
-	private int points;
+	private Integer poIntegers;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "filling", cascade = CascadeType.REMOVE)
+	private List<Answer> answers;
 
 	public Filling() {
 	}
@@ -45,11 +57,11 @@ public class Filling implements Serializable {
 		this.timestamp = timestamp;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -77,18 +89,35 @@ public class Filling implements Serializable {
 		this.timestamp = timestamp;
 	}
 
-	public int getPoints() {
-		return points;
+	public Integer getPoIntegers() {
+		return poIntegers;
 	}
 
-	public void setPoints(int points) {
-		this.points = points;
+	public void setPoIntegers(Integer poIntegers) {
+		this.poIntegers = poIntegers;
+	}
+
+	public List<Answer> getAnswers() {
+		return answers;
+	}
+
+	public void setAnswers(List<Answer> answers) {
+		this.answers = answers;
+	}
+	
+	public void addAnswer(Answer answer) {
+		getAnswers().add(answer);
+		answer.setFilling(this);
+	}
+	
+	public void removeAnswer(Answer answer) {
+		getAnswers().remove(answer);
 	}
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
+		final Integer prime = 31;
+		Integer result = 1;
 		result = prime * result + id;
 		return result;
 	}
@@ -110,7 +139,8 @@ public class Filling implements Serializable {
 	@Override
 	public String toString() {
 		return "Filling [id=" + id + ", registeredUser=" + registeredUser + ", masterQuestionnaire="
-				+ masterQuestionnaire + ", timestamp=" + timestamp + ", points=" + points + "]";
+				+ masterQuestionnaire + ", timestamp=" + timestamp + ", poIntegers=" + poIntegers + ", answers=" + answers
+				+ "]";
 	}
 
 }
