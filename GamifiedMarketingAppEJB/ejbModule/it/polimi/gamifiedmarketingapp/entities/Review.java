@@ -16,6 +16,10 @@ public class Review implements Serializable {
 
 	private static final long serialVersionUID = -4517875468330906225L;
 	
+	public static Integer TITLE_LENGTH = 250;
+	
+	public static Integer TEXT_LENGTH = 500;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;

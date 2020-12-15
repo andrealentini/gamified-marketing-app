@@ -30,6 +30,8 @@ public class Product implements Serializable {
 
 	private static final long serialVersionUID = -6194293176038889235L;
 	
+	public static Integer PRODUCT_NAME_LENGTH = 45;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;

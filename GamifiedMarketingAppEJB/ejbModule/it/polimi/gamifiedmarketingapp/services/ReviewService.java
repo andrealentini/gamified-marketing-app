@@ -13,9 +13,6 @@ import it.polimi.gamifiedmarketingapp.exceptions.FieldLengthException;
 @Stateless
 public class ReviewService {
 	
-	private static Integer TITLE_LENGTH = 250;
-	private static Integer TEXT_LENGTH = 500;
-	
 	@PersistenceContext(unitName = "GamifiedMarketingAppEJB")
 	private EntityManager em;
 	
@@ -28,9 +25,9 @@ public class ReviewService {
 			throw new IllegalArgumentException("Product ID can't be null");
 		if (title == null) 
 			throw new IllegalArgumentException("Title can't be null");
-		if (title.length() > TITLE_LENGTH)
+		if (title.length() > Review.TITLE_LENGTH)
 			throw new FieldLengthException("Title too long");
-		if (text != null && text.length() > TEXT_LENGTH)
+		if (text != null && text.length() > Review.TEXT_LENGTH)
 			throw new FieldLengthException("Text too long");
 		RegisteredUser registeredUser = em.find(RegisteredUser.class, registeredUserId);
 		if (registeredUser == null)

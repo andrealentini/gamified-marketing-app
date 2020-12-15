@@ -5,9 +5,11 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 
+import it.polimi.gamifiedmarketingapp.entities.Filling;
 import it.polimi.gamifiedmarketingapp.entities.MasterQuestionnaire;
 import it.polimi.gamifiedmarketingapp.entities.Product;
 import it.polimi.gamifiedmarketingapp.exceptions.EntryNotFoundException;
+import it.polimi.gamifiedmarketingapp.utils.TypeUtils;
 import it.polimi.gamifiedmarketingapp.wrappers.AnswerWrapper;
 import it.polimi.gamifiedmarketingapp.wrappers.QuestionWrapper;
 
@@ -70,21 +72,15 @@ public class FacadeService extends AbstractFacadeService {
 				Integer rangeValue = answerWrapper.getRangeValue();
 				String answerText = answerWrapper.getText();
 				List<Integer> answerChoices = answerWrapper.getAnswerChoices();
-				if (answerText == null && rangeValue == null && (answerChoices == null || answerChoices.size() == 0))
-					throw new UnsupportedOperationException("Can't save an empty answer");
-				if (rangeValue != null) {
-					if (answerText != null || answerChoices != null || (answerChoices != null && answerChoices.size() > 0))
-						throw new UnsupportedOperationException("Can't save multiple-type answer");
+				Integer totalArgumentTruthValue = TypeUtils.getTruthValueAsInteger(answerText != null) +
+						TypeUtils.getTruthValueAsInteger(rangeValue != null) + TypeUtils.getTruthValueAsInteger(answerChoices != null);
+				if (totalArgumentTruthValue != 1)
+					throw new UnsupportedOperationException("Only single-type answers are supported.");
+				if (rangeValue != null)
 					answerId = answerService.createRangedAnswer(rangeValue, questionId, fillingId);
-				}
-				if (answerText != null) {
-					if (rangeValue != null || answerChoices != null || (answerChoices != null && answerChoices.size() > 0))
-						throw new UnsupportedOperationException("Can't save multiple-type answer");
+				if (answerText != null)
 					answerId = answerService.createTextAnswer(answerText, questionId, fillingId);
-				}
 				if (answerChoices != null) {
-					if (rangeValue != null || answerText != null)
-						throw new UnsupportedOperationException("Can't save multiple-type answer");
 					if (answerChoices.size() == 0)
 						throw new UnsupportedOperationException("Can't save multiple choice answer with no choices");
 					answerId = answerService.createMultipleChoiceAnswer(questionId, fillingId);
@@ -93,6 +89,21 @@ public class FacadeService extends AbstractFacadeService {
 				}
 			}
 		}
+	}
+	
+	public Integer checkAlreadyExistingFilling(Integer registeredUserId, Integer productId) {
+		Product product = productService.findProductById(productId);
+		if (product == null)
+			throw new EntryNotFoundException("Product not found");
+		MasterQuestionnaire masterQuestionnaire = product.getMasterQuestionnaire();
+		if (masterQuestionnaire == null)
+			throw new EntryNotFoundException("Master questionnaire not found");
+		Filling filling = fillingService.findByRegisteredUserIdAndMasterQuestionnaireId(registeredUserId, productId);
+		return filling == null ? null : filling.getId();
+	}
+	
+	public void deleteFilling(Integer fillingId) {
+		fillingService.deleteFilling(fillingId);
 	}
 	
 }

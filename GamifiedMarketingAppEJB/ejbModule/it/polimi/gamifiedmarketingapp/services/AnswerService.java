@@ -1,7 +1,10 @@
 package it.polimi.gamifiedmarketingapp.services;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 
 import it.polimi.gamifiedmarketingapp.entities.Answer;
@@ -13,8 +16,6 @@ import it.polimi.gamifiedmarketingapp.exceptions.RangeOutOfBoundException;
 
 @Stateless
 public class AnswerService {
-	
-	private static final Integer TEXT_LENGTH = 500;
 
 	@PersistenceContext(unitName = "GamifiedMarketingAppEJB")
 	private EntityManager em;
@@ -26,11 +27,30 @@ public class AnswerService {
 		return answer;
 	}
 	
+	public Answer findByQuestionIdAndFillingId(Integer questionId, Integer fillingId) {
+		if (questionId == null)
+			throw new IllegalArgumentException("Question ID can't be null");
+		if (fillingId == null)
+			throw new IllegalArgumentException("Filling ID can't be null");
+		List<Answer> answers = em.createNamedQuery("Answer.findByQuestionIdAndFillingId", Answer.class)
+				.setParameter("questionId", questionId)
+				.setParameter("fillingId", fillingId)
+				.getResultList();
+		if (answers == null)
+			return null;
+		if (answers.size() == 1)
+			return answers.get(0);
+		throw new NonUniqueResultException("More than one answer with the same question and the same filling");
+	}
+	
 	private Answer assembleAnswer(Integer questionId, Integer fillingId) {
 		if (questionId == null)
 			throw new IllegalArgumentException("Question ID can't be null");
 		if (fillingId == null)
 			throw new IllegalArgumentException("Filling ID can't be null");
+		Answer test = findByQuestionIdAndFillingId(questionId, fillingId);
+		if (test != null)
+			throw new UnsupportedOperationException("Can't save multiple answers for the same question in the filling");
 		Question question = em.find(Question.class, questionId);
 		if (question == null)
 			throw new EntryNotFoundException("Question not found");
@@ -54,7 +74,7 @@ public class AnswerService {
 	public Integer createTextAnswer(String text, Integer questionId, Integer fillingId) {
 		if (text == null || text.length() == 0)
 			throw new IllegalArgumentException("Answer text can't be null or empty");
-		if (text.length() > TEXT_LENGTH)
+		if (text.length() > Answer.TEXT_LENGTH)
 			throw new FieldLengthException("Text too long");
 		Answer answer = assembleAnswer(questionId, fillingId);
 		if (answer.getQuestion().getRange() != null)

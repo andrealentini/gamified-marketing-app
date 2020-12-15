@@ -20,6 +20,8 @@ public class Question implements Serializable {
 
 	private static final long serialVersionUID = 7656448238022023181L;
 	
+	public static final Integer TEXT_LENGTH = 500;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;

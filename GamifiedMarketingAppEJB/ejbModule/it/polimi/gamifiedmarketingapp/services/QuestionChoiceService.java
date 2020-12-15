@@ -12,8 +12,6 @@ import it.polimi.gamifiedmarketingapp.exceptions.FieldLengthException;
 @Stateless
 public class QuestionChoiceService {
 	
-	private static final Integer TEXT_LENGTH = 500;
-	
 	@PersistenceContext(unitName = "GamifiedMarketingAppEJB")
 	private EntityManager em;
 	
@@ -22,7 +20,7 @@ public class QuestionChoiceService {
 			throw new IllegalArgumentException("Question ID can't be null");
 		if (text == null)
 			throw new IllegalArgumentException("Text can't be null");
-		if (text.length() > TEXT_LENGTH)
+		if (text.length() > QuestionChoice.TEXT_LENGTH)
 			throw new FieldLengthException("Question choice text too long");
 		Question question = em.find(Question.class, questionId);
 		if (question == null)

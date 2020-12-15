@@ -58,5 +58,14 @@ public class FillingService {
 		em.flush();
 		return filling.getId();
 	}
+	
+	public void deleteFilling(Integer fillingId) {
+		if (fillingId == null)
+			throw new IllegalArgumentException("Filling ID can't be null");
+		Filling filling = em.find(Filling.class, fillingId);
+		if (filling == null)
+			throw new EntryNotFoundException("Filling not found");
+		em.remove(filling);
+	}
 
 }

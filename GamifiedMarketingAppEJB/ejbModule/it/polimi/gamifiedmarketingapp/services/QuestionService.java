@@ -12,8 +12,6 @@ import it.polimi.gamifiedmarketingapp.exceptions.RangeOutOfBoundException;
 
 @Stateless
 public class QuestionService {
-	
-	private static final Integer TEXT_LENGTH = 500;
 
 	@PersistenceContext(unitName = "GamifiedMarketingAppEJB")
 	private EntityManager em;
@@ -32,7 +30,7 @@ public class QuestionService {
 			throw new IllegalArgumentException("Optional flag can't be null");
 		if (text == null)
 			throw new IllegalArgumentException("Text can't be null");
-		if (text.length() > TEXT_LENGTH)
+		if (text.length() > Question.TEXT_LENGTH)
 			throw new FieldLengthException("Question text too long");
 		Questionnaire questionnaire = em.find(Questionnaire.class, questionnaireId);
 		if (questionnaire == null)

@@ -16,8 +16,6 @@ import it.polimi.gamifiedmarketingapp.utils.DateComparator;
 
 @Stateless	//Stateless Java Bean that doesn't mantain or depend to session information
 public class ProductService {
-	
-	private static Integer PRODUCT_NAME_LENGTH = 45;
 
 	@PersistenceContext(unitName = "GamifiedMarketingAppEJB")
 	private EntityManager em;
@@ -47,7 +45,7 @@ public class ProductService {
 	public Integer createProduct(String name, Date date) {
 		if (name == null)
 			throw new IllegalArgumentException("Product name can't be null");
-		if (name.length() > PRODUCT_NAME_LENGTH)
+		if (name.length() > Product.PRODUCT_NAME_LENGTH)
 			throw new FieldLengthException("Product name can't be more than 45 characters long");
 		if (date == null)
 			throw new IllegalArgumentException("Date can't be null");

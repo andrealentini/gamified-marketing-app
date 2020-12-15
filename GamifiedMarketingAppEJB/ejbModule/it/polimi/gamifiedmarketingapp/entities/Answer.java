@@ -11,14 +11,21 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "answer", schema = "gamified_marketing_app_db")
+@NamedQueries({
+	@NamedQuery(name = "Answer.findByQuestionIdAndFillingId", query = "SELECT a FROM Answer a WHERE a.question.id = :questionId AND a.filling.id = :fillingId"),
+})
 public class Answer implements Serializable {
 
 	private static final long serialVersionUID = -4725398773109519182L;
+	
+	public static final Integer TEXT_LENGTH = 500;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

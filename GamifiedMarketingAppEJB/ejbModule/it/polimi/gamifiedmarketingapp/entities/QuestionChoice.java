@@ -16,6 +16,8 @@ public class QuestionChoice implements Serializable {
 
 	private static final long serialVersionUID = -1613673532740796552L;
 	
+	public static final Integer TEXT_LENGTH = 500;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
