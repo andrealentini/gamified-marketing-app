@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -22,6 +23,7 @@ public class Questionnaire implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
+	@Column(name = "is_marketing")
 	private Boolean isMarketing;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "questionnaire", cascade = CascadeType.REMOVE)
@@ -64,28 +66,6 @@ public class Questionnaire implements Serializable {
 	
 	public void removeQuestion(Question question) {
 		getQuestions().remove(question);
-	}
-
-	@Override
-	public int hashCode() {
-		final Integer prime = 31;
-		Integer result = 1;
-		result = prime * result + id;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Questionnaire other = (Questionnaire) obj;
-		if (id != other.id)
-			return false;
-		return true;
 	}
 
 	@Override

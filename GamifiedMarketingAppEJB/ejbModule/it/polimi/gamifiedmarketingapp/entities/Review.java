@@ -29,7 +29,7 @@ public class Review implements Serializable {
 	private String text;
 	
 	@ManyToOne
-	@JoinColumn(name = "registeredUser")
+	@JoinColumn(name = "registered_user")
 	private RegisteredUser registeredUser;
 	
 	@ManyToOne
@@ -84,28 +84,6 @@ public class Review implements Serializable {
 
 	public void setProduct(Product product) {
 		this.product = product;
-	}
-
-	@Override
-	public int hashCode() {
-		final Integer prime = 31;
-		Integer result = 1;
-		result = prime * result + id;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Review other = (Review) obj;
-		if (id != other.id)
-			return false;
-		return true;
 	}
 
 	@Override

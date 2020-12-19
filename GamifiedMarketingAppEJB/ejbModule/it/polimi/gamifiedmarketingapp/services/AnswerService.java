@@ -36,7 +36,7 @@ public class AnswerService {
 				.setParameter("questionId", questionId)
 				.setParameter("fillingId", fillingId)
 				.getResultList();
-		if (answers == null)
+		if (answers == null || answers.size() == 0)
 			return null;
 		if (answers.size() == 1)
 			return answers.get(0);
@@ -63,7 +63,7 @@ public class AnswerService {
 	
 	public Integer createMultipleChoiceAnswer(Integer questionId, Integer fillingId) {
 		Answer answer = assembleAnswer(questionId, fillingId);
-		if (answer.getQuestion().getRange() > 0)
+		if (answer.getQuestion().getUpperBound() != null)
 			throw new UnsupportedOperationException("Can't answer with choices to a ranged question");
 		answer.getFilling().addAnswer(answer);
 		em.persist(answer);
@@ -77,7 +77,7 @@ public class AnswerService {
 		if (text.length() > Answer.TEXT_LENGTH)
 			throw new FieldLengthException("Text too long");
 		Answer answer = assembleAnswer(questionId, fillingId);
-		if (answer.getQuestion().getRange() != null)
+		if (answer.getQuestion().getUpperBound() != null)
 			throw new UnsupportedOperationException("Can't answer with text to a ranged question");
 		if (answer.getQuestion().isMultipleChoicesSupport() != null)
 			throw new UnsupportedOperationException("Can't answer with text to a multiple choice question");
@@ -92,7 +92,7 @@ public class AnswerService {
 		if (rangeValue == null)
 			throw new RangeOutOfBoundException("Range upper bound can't be negative");
 		Answer answer = assembleAnswer(questionId, fillingId);
-		if (answer.getQuestion().getRange() == null)
+		if (answer.getQuestion().getUpperBound() == null)
 			throw new UnsupportedOperationException("Can't answer with range to a non-ranged question");
 		answer.setRangeValue(rangeValue);
 		answer.getFilling().addAnswer(answer);

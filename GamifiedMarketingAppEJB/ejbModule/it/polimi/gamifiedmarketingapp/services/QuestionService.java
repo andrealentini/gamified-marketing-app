@@ -41,22 +41,22 @@ public class QuestionService {
 	
 	public Integer createQuestion(String text, Boolean optional, Integer questionnaireId) {
 		Question question = this.assembleQuestion(text, optional, questionnaireId);
-		question.getQuestionnaire().addQuestion(question);
 		em.persist(question);
 		em.flush();
+		question.getQuestionnaire().addQuestion(question);
 		return question.getId();
 	}
 	
-	public Integer createRangedQuestion(String text, Boolean optional, Integer range, Integer questionnaireId) {
-		if (range == null)
+	public Integer createRangedQuestion(String text, Boolean optional, Integer upperBound, Integer questionnaireId) {
+		if (upperBound == null)
 			throw new IllegalArgumentException("Range upper bound can't be null");
-		if (range <= 0)
+		if (upperBound <= 0)
 			throw new RangeOutOfBoundException("Range upper bound can't be negative or equal to 0");
 		Question question = this.assembleQuestion(text, optional, questionnaireId);
-		question.setRange(range);
-		question.getQuestionnaire().addQuestion(question);
+		question.setUpperBound(upperBound);
 		em.persist(question);
 		em.flush();
+		question.getQuestionnaire().addQuestion(question);
 		return question.getId();
 	}
 	
@@ -65,9 +65,9 @@ public class QuestionService {
 			throw new IllegalArgumentException("Multiple choices support flag can't be null");
 		Question question = this.assembleQuestion(text, optional, questionnaireId);
 		question.setMultipleChoicesSupport(multipleChoicesSupport);
-		question.getQuestionnaire().addQuestion(question);
 		em.persist(question);
 		em.flush();
+		question.getQuestionnaire().addQuestion(question);
 		return question.getId();
 	}
 	

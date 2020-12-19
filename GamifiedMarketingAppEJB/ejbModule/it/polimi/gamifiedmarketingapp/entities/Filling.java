@@ -43,7 +43,7 @@ public class Filling implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date timestamp;
 	
-	private Integer poIntegers;
+	private Integer points;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "filling", cascade = CascadeType.REMOVE)
 	private List<Answer> answers;
@@ -89,12 +89,12 @@ public class Filling implements Serializable {
 		this.timestamp = timestamp;
 	}
 
-	public Integer getPoIntegers() {
-		return poIntegers;
+	public Integer getPoints() {
+		return points;
 	}
 
-	public void setPoIntegers(Integer poIntegers) {
-		this.poIntegers = poIntegers;
+	public void setPoints(Integer points) {
+		this.points = points;
 	}
 
 	public List<Answer> getAnswers() {
@@ -115,31 +115,9 @@ public class Filling implements Serializable {
 	}
 
 	@Override
-	public int hashCode() {
-		final Integer prime = 31;
-		Integer result = 1;
-		result = prime * result + id;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Filling other = (Filling) obj;
-		if (id != other.id)
-			return false;
-		return true;
-	}
-
-	@Override
 	public String toString() {
 		return "Filling [id=" + id + ", registeredUser=" + registeredUser + ", masterQuestionnaire="
-				+ masterQuestionnaire + ", timestamp=" + timestamp + ", poIntegers=" + poIntegers + ", answers=" + answers
+				+ masterQuestionnaire + ", timestamp=" + timestamp + ", points=" + points + ", answers=" + answers
 				+ "]";
 	}
 

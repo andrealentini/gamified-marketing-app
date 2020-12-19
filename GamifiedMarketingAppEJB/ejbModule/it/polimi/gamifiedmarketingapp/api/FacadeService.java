@@ -28,15 +28,18 @@ public class FacadeService extends AbstractFacadeService {
 			Integer questionId;
 			if (range != null && multipleChoicesSupport != null)
 				throw new UnsupportedOperationException("A question can't be both ranged and multiple choice");
-			if (range == null && multipleChoicesSupport == null)
+			if (range == null && multipleChoicesSupport == null) {
 				questionId = questionService.
 						createQuestion(questionWrapper.getText(), questionWrapper.isOptional(), questionnaireId);
-			else
-				questionId = range != null ?
-						questionService.
-								createRangedQuestion(questionWrapper.getText(), questionWrapper.isOptional(), range, questionnaireId) :
-						questionService.
-								createMultipleChoiceQuestion(questionWrapper.getText(), questionWrapper.isOptional(), multipleChoicesSupport, questionnaireId);	
+			} else {
+				if (range != null) {
+					questionId = questionService.
+						createRangedQuestion(questionWrapper.getText(), questionWrapper.isOptional(), range, questionnaireId);
+				} else {
+					questionId = questionService.
+						createMultipleChoiceQuestion(questionWrapper.getText(), questionWrapper.isOptional(), multipleChoicesSupport, questionnaireId);
+				}
+			}
 			List<String> choices = questionWrapper.getChoices();
 			if (choices != null && choices.size() > 0 && multipleChoicesSupport == null)
 				throw new UnsupportedOperationException("Can't save a multiple choice question without choices");
@@ -98,7 +101,7 @@ public class FacadeService extends AbstractFacadeService {
 		MasterQuestionnaire masterQuestionnaire = product.getMasterQuestionnaire();
 		if (masterQuestionnaire == null)
 			throw new EntryNotFoundException("Master questionnaire not found");
-		Filling filling = fillingService.findByRegisteredUserIdAndMasterQuestionnaireId(registeredUserId, productId);
+		Filling filling = fillingService.findByRegisteredUserIdAndMasterQuestionnaireId(registeredUserId, masterQuestionnaire.getId());
 		return filling == null ? null : filling.getId();
 	}
 	

@@ -33,7 +33,7 @@ public class MasterQuestionnaireService {
 		List<MasterQuestionnaire> masterQuestionnaires = em.createNamedQuery("MasterQuestionnaire.findByProduct", MasterQuestionnaire.class)
 				.setParameter("productId", productId)
 				.getResultList();
-		if (masterQuestionnaires == null)
+		if (masterQuestionnaires == null || masterQuestionnaires.size() == 0)
 			return null;
 		if (masterQuestionnaires.size() == 1)
 			return masterQuestionnaires.get(0);

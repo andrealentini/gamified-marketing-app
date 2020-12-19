@@ -1,6 +1,11 @@
 package it.polimi.gamifiedmarketingapp.controllers;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.ejb.EJB;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,7 +18,10 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+
+import it.polimi.gamifiedmarketingapp.api.FacadeService;
 import it.polimi.gamifiedmarketingapp.entities.RegisteredUser;
+import it.polimi.gamifiedmarketingapp.wrappers.QuestionWrapper;
 
 @WebServlet("/Home")
 public class GoToHomePage extends HttpServlet {
@@ -21,6 +29,9 @@ public class GoToHomePage extends HttpServlet {
 	private static final long serialVersionUID = -4824243016724725302L;
 	
 	private TemplateEngine templateEngine;
+	
+	@EJB(name = "it.polimi.gamifiedmarketingapp.services/FacadeService")
+	private FacadeService facadeService;
 
 	public GoToHomePage() {}
 
@@ -52,6 +63,12 @@ public class GoToHomePage extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to get data");
 			return;
 		}
+		
+		List<QuestionWrapper> questions = new LinkedList<>();
+		questions.add(new QuestionWrapper("Test 1", false, null, null, null));
+		questions.add(new QuestionWrapper("Test 2", false, null, null, null));
+		
+		facadeService.createDailyEntry(new Date(2020, 12, 17), "Product 1", null, 1, questions);
 		
 		String path = "/WEB-INF/Home.html";
 		ServletContext servletContext = getServletContext();

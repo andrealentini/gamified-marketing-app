@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -33,6 +34,7 @@ public class Answer implements Serializable {
 	
 	private String text;
 	
+	@Column(name = "range_value")
 	private Integer rangeValue;
 	
 	@ManyToOne
@@ -109,28 +111,6 @@ public class Answer implements Serializable {
 	
 	public void removeAnswerChoice(AnswerChoice answerChoice) {
 		getAnswerChoices().remove(answerChoice);
-	}
-
-	@Override
-	public int hashCode() {
-		final Integer prime = 31;
-		Integer result = 1;
-		result = prime * result + id;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Answer other = (Answer) obj;
-		if (id != other.id)
-			return false;
-		return true;
 	}
 
 	@Override

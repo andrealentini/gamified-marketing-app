@@ -28,7 +28,7 @@ public class AnswerChoiceService {
 				.setParameter("answerId", answerId)
 				.setParameter("questionChoiceId", questionChoiceId)
 				.getResultList();
-		if (answerChoices == null)
+		if (answerChoices == null || answerChoices.size() == 0)
 			return null;
 		if (answerChoices.size() == 1)
 			return answerChoices.get(0);

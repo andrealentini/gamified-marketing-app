@@ -35,7 +35,7 @@ public class ProductService {
 		List<Product> products = em.createNamedQuery("Product.findByDate", Product.class)
 				.setParameter("date", date)
 				.getResultList();
-		if (products == null)
+		if (products == null || products.size() == 0)
 			return null;
 		if (products.size() == 1)
 			return products.get(0);

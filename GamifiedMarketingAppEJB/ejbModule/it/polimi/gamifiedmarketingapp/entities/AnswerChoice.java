@@ -66,28 +66,6 @@ public class AnswerChoice implements Serializable {
 	}
 
 	@Override
-	public int hashCode() {
-		final Integer prime = 31;
-		Integer result = 1;
-		result = prime * result + id;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		AnswerChoice other = (AnswerChoice) obj;
-		if (id != other.id)
-			return false;
-		return true;
-	}
-
-	@Override
 	public String toString() {
 		return "AnswerChoice [id=" + id + ", answer=" + answer + ", questionChoice=" + questionChoice + "]";
 	}

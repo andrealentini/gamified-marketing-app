@@ -13,5 +13,8 @@
 		<class>it.polimi.gamifiedmarketingapp.entities.RegisteredUser</class>
 		<class>it.polimi.gamifiedmarketingapp.entities.Review</class>
 		<class>it.polimi.gamifiedmarketingapp.entities.Role</class>
+		<properties>
+			<property name="eclipselink.logging.level" value="FINE"/>
+		</properties>
 	</persistence-unit>
 </persistence>

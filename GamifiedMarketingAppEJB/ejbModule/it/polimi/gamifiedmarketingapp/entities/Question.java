@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -30,8 +31,10 @@ public class Question implements Serializable {
 	
 	private Boolean optional;
 	
-	private Integer range;
+	@Column(name = "upper_bound")
+	private Integer upperBound;
 	
+	@Column(name = "multiple_choices_support")
 	private Boolean multipleChoicesSupport;
 	
 	@ManyToOne
@@ -43,10 +46,10 @@ public class Question implements Serializable {
 
 	public Question() {}
 
-	public Question(String text, Boolean optional, Integer range, Boolean multipleChoicesSupport, Questionnaire questionnaire) {
+	public Question(String text, Boolean optional, Integer upperBound, Boolean multipleChoicesSupport, Questionnaire questionnaire) {
 		this.text = text;
 		this.optional = optional;
-		this.range = range;
+		this.upperBound = upperBound;
 		this.multipleChoicesSupport = multipleChoicesSupport;
 		this.questionnaire = questionnaire;
 	}
@@ -75,12 +78,12 @@ public class Question implements Serializable {
 		this.optional = optional;
 	}
 
-	public Integer getRange() {
-		return range;
+	public Integer getUpperBound() {
+		return upperBound;
 	}
 
-	public void setRange(Integer range) {
-		this.range = range;
+	public void setUpperBound(Integer upperBound) {
+		this.upperBound = upperBound;
 	}
 
 	public Boolean isMultipleChoicesSupport() {
@@ -117,30 +120,8 @@ public class Question implements Serializable {
 	}
 
 	@Override
-	public int hashCode() {
-		final Integer prime = 31;
-		Integer result = 1;
-		result = prime * result + id;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Question other = (Question) obj;
-		if (id != other.id)
-			return false;
-		return true;
-	}
-
-	@Override
 	public String toString() {
-		return "Question [id=" + id + ", text=" + text + ", optional=" + optional + ", range=" + range
+		return "Question [id=" + id + ", text=" + text + ", optional=" + optional + ", upperBound=" + upperBound
 				+ ", multipleChoicesSupport=" + multipleChoicesSupport + ", questionnaire=" + questionnaire
 				+ ", questionChoices=" + questionChoices + "]";
 	}
