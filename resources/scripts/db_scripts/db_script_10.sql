@@ -88,7 +88,7 @@ CREATE TABLE `master_questionnaire` (
     KEY(`product`),
     CONSTRAINT `fk_master_questionnaire_marketing_section` FOREIGN KEY (`marketing_section`) REFERENCES `questionnaire` (`id`),
     CONSTRAINT `fk_master_questionnaire_statistical_section` FOREIGN KEY (`statistical_section`) REFERENCES `questionnaire` (`id`),
-    CONSTRAINT `fk_master_questionnaire_product` FOREIGN KEY (`product`) REFERENCES `product` (`id`),
+    CONSTRAINT `fk_master_questionnaire_product` FOREIGN KEY (`product`) REFERENCES `product` (`id`) ON DELETE CASCADE,
     CONSTRAINT `chk_master_questionnaire_mutual_exclusion` CHECK ((`marketing_section` != `statistical_section`))
 ) ENGINE = InnoDB AUTO_INCREMENT = 272 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -107,7 +107,7 @@ CREATE TABLE `filling` (
     PRIMARY KEY (`id`),
     KEY (`registered_user`, `master_questionnaire`),
     CONSTRAINT `fk_filling_registered_user` FOREIGN KEY (`registered_user`) REFERENCES `registered_user` (`id`),
-    CONSTRAINT `fk_filling_master_questionnaire` FOREIGN KEY (`master_questionnaire`) REFERENCES `master_questionnaire` (`id`)
+    CONSTRAINT `fk_filling_master_questionnaire` FOREIGN KEY (`master_questionnaire`) REFERENCES `master_questionnaire` (`id`) ON DELETE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 272 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
 /* Data inserts for filling table. */
@@ -124,7 +124,7 @@ CREATE TABLE `question` (
     `multiple_choices_support` BOOL,
     `questionnaire` INT NOT NULL,
     PRIMARY KEY (`id`),
-    CONSTRAINT `fk_question_questionnaire` FOREIGN KEY (`questionnaire`) REFERENCES `questionnaire` (`id`),
+    CONSTRAINT `fk_question_questionnaire` FOREIGN KEY (`questionnaire`) REFERENCES `questionnaire` (`id`) ON DELETE CASCADE,
     CONSTRAINT `chk_question_upper_bound` CHECK ((`upper_bound` != NULL AND `upper_bound` > 0))
 ) ENGINE = InnoDB AUTO_INCREMENT = 272 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -139,7 +139,7 @@ CREATE TABLE `question_choice` (
     `text` VARCHAR(500) NOT NULL,
     `question` INT NOT NULL,
     PRIMARY KEY (`id`),
-    CONSTRAINT `fk_question_choice_question` FOREIGN KEY (`question`) REFERENCES `question` (`id`)
+    CONSTRAINT `fk_question_choice_question` FOREIGN KEY (`question`) REFERENCES `question` (`id`) ON DELETE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 272 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
 /* Data inserts for question_choice table. */
@@ -156,8 +156,8 @@ CREATE TABLE `answer` (
     `filling` INT NOT NULL,
     PRIMARY KEY (`id`),
     KEY (`question`, `filling`),
-    CONSTRAINT `fk_answer_question` FOREIGN KEY (`question`) REFERENCES `question` (`id`),
-    CONSTRAINT `fk_answer_filling` FOREIGN KEY (`filling`) REFERENCES `filling` (`id`),
+    CONSTRAINT `fk_answer_question` FOREIGN KEY (`question`) REFERENCES `question` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_answer_filling` FOREIGN KEY (`filling`) REFERENCES `filling` (`id`) ON DELETE CASCADE,
     CONSTRAINT `chk_answer_type_fields` CHECK (( (`range_value` != NULL AND `text` = NULL) OR (`range_value` = NULL AND `text` != NULL) ))
 ) ENGINE = InnoDB AUTO_INCREMENT = 272 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -173,8 +173,8 @@ CREATE TABLE `answer_choice` (
     `question_choice` INT NOT NULL,
     PRIMARY KEY (`id`),
     KEY (`answer`, `question_choice`),
-    CONSTRAINT `fk_answer_choice_answer` FOREIGN KEY (`answer`) REFERENCES `answer` (`id`),
-    CONSTRAINT `fk_answer_choice_question_choice` FOREIGN KEY (`question_choice`) REFERENCES `question_choice` (`id`)
+    CONSTRAINT `fk_answer_choice_answer` FOREIGN KEY (`answer`) REFERENCES `answer` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_answer_choice_question_choice` FOREIGN KEY (`question_choice`) REFERENCES `question_choice` (`id`) ON DELETE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 272 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
 /* Data inserts for answer_choice table. */
@@ -191,7 +191,7 @@ CREATE TABLE `review` (
     `product` INT NOT NULL,
     PRIMARY KEY (`id`),
     CONSTRAINT `fk_review_registered_user` FOREIGN KEY (`registered_user`) REFERENCES `registered_user` (`id`),
-    CONSTRAINT `fk_review_product` FOREIGN KEY (`product`) REFERENCES `product` (`id`)
+    CONSTRAINT `fk_review_product` FOREIGN KEY (`product`) REFERENCES `product` (`id`) ON DELETE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 272 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
 /* Data inserts for review table. */

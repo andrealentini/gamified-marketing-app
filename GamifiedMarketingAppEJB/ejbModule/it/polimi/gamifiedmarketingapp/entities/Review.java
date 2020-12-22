@@ -8,10 +8,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "review", schema = "gamified_marketing_app_db")
+@NamedQueries({
+	@NamedQuery(name = "Review.findReviewsByProductId", query = "SELECT r FROM Review r WHERE r.product.id = :productId"),
+})
 public class Review implements Serializable {
 
 	private static final long serialVersionUID = -4517875468330906225L;

@@ -21,14 +21,15 @@ public class DateComparator implements Comparator<Date> {
 
 	@Override
 	public int compare(Date d1, Date d2) {
-		Calendar calendar = GregorianCalendar.getInstance();
-		calendar.setTime(d1);
-		calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 0, 0, 0);
-		Date date1 = calendar.getTime();
-		calendar.setTime(d2);
-		calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 0, 0, 0);
-		Date date2 = calendar.getTime();
-		return date1.compareTo(date2);
+		Calendar c1 = GregorianCalendar.getInstance();
+		Calendar c2 = GregorianCalendar.getInstance();
+		c1.setTime(d1);
+		c1.set(c1.get(Calendar.YEAR), c1.get(Calendar.MONTH), c1.get(Calendar.DATE), 0, 0, 0);
+		c2.setTime(d2);
+		c2.set(c2.get(Calendar.YEAR), c2.get(Calendar.MONTH), c2.get(Calendar.DATE), 0, 0, 0);
+		c1.set(Calendar.MILLISECOND, 0);
+		c2.set(Calendar.MILLISECOND, 0);
+		return c1.before(c2) ? -1 : c1.after(c2) ? 1 : 0;
 	}
 
 }

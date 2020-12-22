@@ -10,6 +10,7 @@ import it.polimi.gamifiedmarketingapp.services.ProductService;
 import it.polimi.gamifiedmarketingapp.services.QuestionChoiceService;
 import it.polimi.gamifiedmarketingapp.services.QuestionService;
 import it.polimi.gamifiedmarketingapp.services.QuestionnaireService;
+import it.polimi.gamifiedmarketingapp.services.ReviewService;
 
 public abstract class AbstractFacadeService {
 	
@@ -36,5 +37,8 @@ public abstract class AbstractFacadeService {
 	
 	@EJB(name = "it.polimi.db2.mission.services/FillingService")
 	protected FillingService fillingService;
+	
+	@EJB(name = "it.polimi.db2.mission.services/ReviewService")
+	protected ReviewService reviewService;
 
 }

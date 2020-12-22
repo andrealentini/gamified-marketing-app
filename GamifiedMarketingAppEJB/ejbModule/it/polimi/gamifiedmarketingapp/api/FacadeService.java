@@ -23,18 +23,18 @@ public class FacadeService extends AbstractFacadeService {
 			productService.setProductPicture(productService.findProductByDate(date).getId(), productPicture);
 		Integer questionnaireId = questionnaireService.createQuestionnaire(true);
 		for (QuestionWrapper questionWrapper : questions) {
-			Integer range = questionWrapper.getRange();
+			Integer upperBound = questionWrapper.getUpperBound();
 			Boolean multipleChoicesSupport = questionWrapper.isMultipleChoicesSupport();
 			Integer questionId;
-			if (range != null && multipleChoicesSupport != null)
+			if (upperBound != null && multipleChoicesSupport != null)
 				throw new UnsupportedOperationException("A question can't be both ranged and multiple choice");
-			if (range == null && multipleChoicesSupport == null) {
+			if (upperBound == null && multipleChoicesSupport == null) {
 				questionId = questionService.
 						createQuestion(questionWrapper.getText(), questionWrapper.isOptional(), questionnaireId);
 			} else {
-				if (range != null) {
+				if (upperBound != null) {
 					questionId = questionService.
-						createRangedQuestion(questionWrapper.getText(), questionWrapper.isOptional(), range, questionnaireId);
+						createRangedQuestion(questionWrapper.getText(), questionWrapper.isOptional(), upperBound, questionnaireId);
 				} else {
 					questionId = questionService.
 						createMultipleChoiceQuestion(questionWrapper.getText(), questionWrapper.isOptional(), multipleChoicesSupport, questionnaireId);
@@ -57,6 +57,8 @@ public class FacadeService extends AbstractFacadeService {
 		if (date == null)
 			throw new IllegalArgumentException("Date can't be null");
 		Product product = productService.findProductByDate(date);
+		if (product == null)
+			throw new EntryNotFoundException("Product not found");
 		productService.deleteProduct(product.getId());
 	}
 	

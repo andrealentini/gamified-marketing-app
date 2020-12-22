@@ -1,9 +1,8 @@
 package it.polimi.gamifiedmarketingapp.controllers;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletContext;
@@ -21,7 +20,6 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.gamifiedmarketingapp.api.FacadeService;
 import it.polimi.gamifiedmarketingapp.entities.RegisteredUser;
-import it.polimi.gamifiedmarketingapp.wrappers.QuestionWrapper;
 
 @WebServlet("/Home")
 public class GoToHomePage extends HttpServlet {
@@ -64,11 +62,26 @@ public class GoToHomePage extends HttpServlet {
 			return;
 		}
 		
+		/*
 		List<QuestionWrapper> questions = new LinkedList<>();
 		questions.add(new QuestionWrapper("Test 1", false, null, null, null));
 		questions.add(new QuestionWrapper("Test 2", false, null, null, null));
 		
-		facadeService.createDailyEntry(new Date(2020, 12, 17), "Product 1", null, 1, questions);
+		Calendar calendar = GregorianCalendar.getInstance();
+		facadeService.createDailyEntry(calendar.getTime(), "Product 1", null, 1, questions);
+		*/
+		
+		/*
+		List<AnswerWrapper> answers = new LinkedList<>();
+		answers.add(new AnswerWrapper("A1", null, 272, null));
+		answers.add(new AnswerWrapper("A2", null, 273, null));
+		facadeService.createQuestionnaireFilling(1, 272, answers);
+		*/
+		
+		
+		Calendar calendar = GregorianCalendar.getInstance();
+		facadeService.deleteDailyEntry(calendar.getTime());
+		
 		
 		String path = "/WEB-INF/Home.html";
 		ServletContext servletContext = getServletContext();

@@ -1,5 +1,6 @@
 package it.polimi.gamifiedmarketingapp.api;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -18,13 +19,24 @@ import it.polimi.gamifiedmarketingapp.exceptions.EntryNotFoundException;
 @Stateless
 public class DataService extends AbstractFacadeService {
 	
-	public List<Review> getReviews(Integer productId) {
+	public Product getProduct(Date date) {
+		return productService.findProductByDate(date);
+	}
+	
+	public List<Product> getProducts(Integer limit) {
+		return productService.findLimitedNumberOfProducts(limit);
+	}
+	
+	public List<Review> getReviews(Integer productId, Integer limit) {
 		if (productId == null)
 			throw new IllegalArgumentException("Product ID can't be null");
 		Product product = productService.findProductById(productId);
 		if (product == null)
 			throw new EntryNotFoundException("Product not found");
-		return product.getReviews();
+		if (limit == null)
+			return product.getReviews();
+		else
+			return reviewService.findLimitedNumberOfReviewsByProductId(productId, limit);
 	}
 	
 	public MasterQuestionnaire getMasterQuestionnaire(Integer productId) {

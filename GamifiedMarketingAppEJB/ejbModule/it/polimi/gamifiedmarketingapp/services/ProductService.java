@@ -1,12 +1,14 @@
 package it.polimi.gamifiedmarketingapp.services;
 
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import it.polimi.gamifiedmarketingapp.entities.Product;
 import it.polimi.gamifiedmarketingapp.exceptions.DateException;
@@ -42,6 +44,18 @@ public class ProductService {
 		throw new NonUniqueResultException("More than one product with the same date");		
 	}
 	
+	public List<Product> findLimitedNumberOfProducts(Integer limit) {
+		if (limit != null && limit <= 0)
+			throw new IllegalArgumentException("Limit can't be null or negative or equal to zero");
+		TypedQuery<Product> query = em.createNamedQuery("Product.findAll", Product.class);
+		if (limit != null)
+			query.setMaxResults(limit);
+		List<Product> result = query.getResultList();
+		if (result == null || result.size() == 0)
+			return null;
+		return result;
+	}
+	
 	public Integer createProduct(String name, Date date) {
 		if (name == null)
 			throw new IllegalArgumentException("Product name can't be null");
@@ -49,7 +63,7 @@ public class ProductService {
 			throw new FieldLengthException("Product name can't be more than 45 characters long");
 		if (date == null)
 			throw new IllegalArgumentException("Date can't be null");
-		if (DateComparator.getInstance().compare(date, new Date()) < 0)
+		if (DateComparator.getInstance().compare(date, GregorianCalendar.getInstance().getTime()) < 0)
 			throw new DateException("Date can't be older than today");
 		Product queriedProduct = this.findProductByDate(date);
 		if (queriedProduct != null)

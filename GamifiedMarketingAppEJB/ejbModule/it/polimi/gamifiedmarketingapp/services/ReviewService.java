@@ -1,8 +1,11 @@
 package it.polimi.gamifiedmarketingapp.services;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import it.polimi.gamifiedmarketingapp.entities.Product;
 import it.polimi.gamifiedmarketingapp.entities.RegisteredUser;
@@ -17,6 +20,24 @@ public class ReviewService {
 	private EntityManager em;
 	
 	public ReviewService() {}
+	
+	public List<Review> findLimitedNumberOfReviewsByProductId(Integer productId, Integer limit) {
+		if (productId == null)
+			throw new IllegalArgumentException("Product ID can't be null");
+		if (limit != null && limit <= 0)
+			throw new IllegalArgumentException("Limit can't be negative or equal to zero");
+		Product product = em.find(Product.class, productId);
+		if (product == null)
+			throw new EntryNotFoundException("Product not found");
+		TypedQuery<Review> query = em.createNamedQuery("Review.findReviewsByProductId", Review.class)
+				.setParameter("productId", productId);    
+		if (limit != null)
+			query.setMaxResults(limit);
+		List<Review> result = query.getResultList();
+		if (result == null || result.size() == 0)
+			return null;
+		return result;
+	}
 	
 	public void addReview(String title, String text, Integer registeredUserId, Integer productId) {
 		if (registeredUserId == null)

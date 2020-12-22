@@ -11,16 +11,16 @@ public class QuestionWrapper implements Serializable {
 	
 	private Boolean optional;
 	
-	private Integer range;
+	private Integer upperBound;
 	
 	private Boolean multipleChoicesSupport;
 	
 	private List<String> choices;
 
-	public QuestionWrapper(String text, Boolean optional, Boolean multipleChoicesSupport, Integer range, List<String> choices) {
+	public QuestionWrapper(String text, Boolean optional, Boolean multipleChoicesSupport, Integer upperBound, List<String> choices) {
 		this.text = text;
 		this.optional = optional;
-		this.range = range;
+		this.upperBound = upperBound;
 		this.multipleChoicesSupport = multipleChoicesSupport;
 		this.choices = choices;
 	}
@@ -41,12 +41,12 @@ public class QuestionWrapper implements Serializable {
 		this.optional = optional;
 	}
 
-	public Integer getRange() {
-		return range;
+	public Integer getUpperBound() {
+		return upperBound;
 	}
 
-	public void setRange(Integer range) {
-		this.range = range;
+	public void setUpperBound(Integer upperBound) {
+		this.upperBound = upperBound;
 	}
 
 	public List<String> getChoices() {
@@ -67,7 +67,7 @@ public class QuestionWrapper implements Serializable {
 
 	@Override
 	public String toString() {
-		return "QuestionWrapper [text=" + text + ", optional=" + optional + ", range=" + range
+		return "QuestionWrapper [text=" + text + ", optional=" + optional + ", upperBound=" + upperBound
 				+ ", multipleChoicesSupport=" + multipleChoicesSupport + ", choices=" + choices + "]";
 	}
 

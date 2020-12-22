@@ -1,6 +1,6 @@
 package it.polimi.gamifiedmarketingapp.services;
 
-import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -29,7 +29,7 @@ public class FillingService {
 				.setParameter("registeredUserId", registeredUserId)
 				.setParameter("masterQuestionnaireId", masterQuestionnaireId)
 				.getResultList();
-		if (fillings == null)
+		if (fillings == null || fillings.size() == 0)
 			return null;
 		if (fillings.size() == 1)
 			return fillings.get(0);
@@ -52,7 +52,7 @@ public class FillingService {
 			throw new EntryNotFoundException("Master questionnaire not found");
 		if (registeredUser.isBlocked())
 			throw new PermissionDeniedException("A blocked user can't fill a questionnaire");
-		Filling filling = new Filling(registeredUser, masterQuestionnaire, new Date());
+		Filling filling = new Filling(registeredUser, masterQuestionnaire, GregorianCalendar.getInstance().getTime());
 		masterQuestionnaire.addFilling(filling);
 		em.persist(filling);
 		em.flush();
