@@ -1,6 +1,9 @@
 package it.polimi.gamifiedmarketingapp.controllers;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import javax.ejb.EJB;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -13,6 +16,9 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+
+import it.polimi.gamifiedmarketingapp.api.DataService;
+import it.polimi.gamifiedmarketingapp.entities.Product;
 import it.polimi.gamifiedmarketingapp.entities.RegisteredUser;
 import it.polimi.gamifiedmarketingapp.exceptions.CredentialsException;
 import it.polimi.gamifiedmarketingapp.services.RegisteredUserService;
@@ -28,6 +34,9 @@ public class CheckLogin extends HttpServlet {
 	
 	@EJB(name = "it.polimi.gamifiedmarketingapp.services/RegisteredUserService")
 	private RegisteredUserService registeredUserService;
+	
+	@EJB(name = "it.polimi.gamifiedmarketingapp.api/DataService")
+	protected DataService dataService;
 
 	public CheckLogin() {}
 
@@ -63,6 +72,15 @@ public class CheckLogin extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not check credentials");
 			return;
 		}
+		
+		Product product = null;
+		try {
+			Calendar calendar = GregorianCalendar.getInstance();
+			product = dataService.getProduct(calendar.getTime());
+		} catch (Exception e) {
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to get data");
+			return;
+		}
 
 		String path;
 		
@@ -74,6 +92,8 @@ public class CheckLogin extends HttpServlet {
 			templateEngine.process(path, ctx, response.getWriter());
 		} else {
 			request.getSession().setAttribute("user", registeredUser);
+			if (product != null)
+				request.getSession().setAttribute("product", product);
 			path = getServletContext().getContextPath() + "/Home";
 			response.sendRedirect(path);
 		}

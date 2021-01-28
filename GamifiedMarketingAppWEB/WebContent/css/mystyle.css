@@ -1,8 +1,3 @@
 table, th, tr {
   border: 1px solid black;
 }
-
-round_box_container {
-	border-radius: 10px;
-	border: 1px solid black;
-}

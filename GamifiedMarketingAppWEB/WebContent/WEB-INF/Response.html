@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Questionnaire</title>
+<link rel="stylesheet" type="text/css" media="all"
+	href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}" />
+</head>
+<body>
+	<div align="right">
+		<a th:href="@{/Home}">Home</a>
+		<a th:href="@{/Logout}">Logout</a>
+	</div>
+	<h1 align="center">Response</h1>
+	<p align="center" th:if="${response == true}">
+		Thank you for filling the questionnaire about the product of the day. Your answers have been saved correctly.
+	</p>
+	<p align="center" th:if="${response == false}">
+		We are sorry for your decision. You can no longer fill the questionnaire but you can still partecipate on the next days.
+	</p>
+</body>
+</html>

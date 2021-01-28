@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Questionnaire</title>
+<link rel="stylesheet" type="text/css" media="all"
+	href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}" />
+</head>
+<body>
+	<div align="right">
+		<a th:href="@{/Home}">Home</a>
+		<a th:href="@{/Logout}">Logout</a>
+	</div>
+	<h1 align="center">Questionnaire</h1>
+	<p align="center" th:text="${masterQuestionnaire.product.name}"></p>
+	<form action="#" th:if="${statisticalQuestionnaire == null}" th:action="@{/FillQuestionnaire}" method="POST">
+		<h2>Marketing Section</h2>
+		<fieldset>
+			<div th:each="q : ${marketingQuestionnaire}">
+				<p th:text="${q.question.text}"></p>
+				<p>
+					<input
+						th:if="${q.question.upperBound == null && q.question.multipleChoicesSupport == null}"
+						th:name="${q.question.id}"
+						th:field="${q.text}"
+						style="width: 100%"
+						type="text" required/>
+					<input
+						th:if="${q.question.upperBound != null && q.question.multipleChoicesSupport == null}"
+						th:name="${q.question.id}"
+						th:field="${q.value}"
+						type="text" required/>
+					<input
+						th:if="${q.question.upperBound == null && q.question.multipleChoicesSupport != null}"
+						th:each="c : ${q.choices}"
+						th:field="${c.checked}"
+						th:text="${c.choice.text + ' '}"
+						th:name="${q.question.id} + '-' + ${c.choice.text}"
+						type="checkbox"/>
+				</p>
+			</div>
+			<input type="submit" name="next" value="Next">
+		</fieldset>
+	</form>
+	
+	<form action="#" th:if="${statisticalQuestionnaire != null}" th:action="@{/FillQuestionnaire}" method="POST">
+		<h2>Statistical Section</h2>
+		<fieldset>
+			<div th:each="q : ${statisticalQuestionnaire}">
+				<p th:text="${q.question.text}"></p>
+				<p>
+					<input
+						th:if="${q.question.upperBound == null && q.question.multipleChoicesSupport == null}"
+						th:name="${q.question.id}"
+						th:field="${q.text}"
+						style="width: 100%"
+						type="text"/>
+					<input
+						th:if="${q.question.upperBound != null && q.question.multipleChoicesSupport == null}"
+						th:name="${q.question.id}"
+						th:field="${q.value}"
+						type="text"/>
+					<input
+						th:if="${q.question.upperBound == null && q.question.multipleChoicesSupport != null}"
+						th:each="c : ${q.choices}"
+						th:field="${c.checked}"
+						th:text="${c.choice.text + ' '}"
+						th:name="${q.question.id} + '-' + ${c.choice.text}"
+						type="checkbox"/>
+				</p>
+			</div>
+			<input type="submit" name="action" value="Submit" />
+			<input type="submit" name="action" value="Cancel" />
+		</fieldset>
+	</form>
+</body>
+</html>

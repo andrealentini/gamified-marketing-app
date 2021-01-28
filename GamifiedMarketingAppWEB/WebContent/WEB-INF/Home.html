@@ -10,13 +10,14 @@
 	<div align="right">
 		<a th:href="@{/Logout}">Logout</a>
 	</div>
-	<h1>Gamified Marketing App Home Page</h1>
-	<p
+	<h1 align="center">Gamified Marketing App</h1>
+	<p align="center"
 		th:text="${'Welcome back' + (session.user.name != null ? ', ' + session.user.name : '') + '. You logged in as ' + session.user.role.name + '.'}"></p>
 	<div>
 		<h3>Product of the day</h3>
-		<div class="round_box_container">
-			<h3>Product of the day</h3>
+		<div>
+			<h4 th:text="${product.name}"></h4>
+			<a th:href="@{/FillQuestionnaire}">Fill Questionnaire</a>
 		</div>
 	</div>
 
