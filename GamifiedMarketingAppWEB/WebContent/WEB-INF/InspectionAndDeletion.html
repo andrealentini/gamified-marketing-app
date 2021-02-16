@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Questionnaire</title>
+<link rel="stylesheet" type="text/css" media="all"
+	href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}" />
+</head>
+<body>
+	<form th:action="@{/DeleteQuestionnaire}" method="GET">
+    <input type="number" th:name="pageNumber" th:placeholder="pageNumber" />
+    <input type="number" th:name="pageSize" th:placeholder="pageSize" />
+    <div class="clearfix">
+        <button type="submit">Inspect</button>
+    </div>
+</form>
+        <ul th:each="questionnaire : ${questionnaires}">
+        	<li th:text="${questionnaire.productName} + ' ' + ${questionnaire.questionnaireDate}"><form class="button" th:action="@{/DeleteQuestionnaire}" method="POST">
+                        <input type="submit" th:name="{date}" th:field="${questionnaire.questionnaireDate}"/>
+                    </form></li>
+        	<li>
+        		<ul>
+        			<li th:each="canceledUser : ${questionnaire.usersCanceled}" th:text="${canceledUser.username}"></li>
+   				</ul>
+        	</li>
+        	<li>
+        		<ul th:each="submission : ${questionnaire.usersSubmissions">
+        			<li th:text="${submission.key.username}">
+        				<ul th:each="answer : ${submission.value}">
+        					<li th:text="${answer.question.text}"></li>
+        					<li th:if="${answer.question.upperBound} == null && answer.question.multipleChoicesSupport == null}" th:text="${answer.text}"></li>
+        					<li th:if="${answer.question.upperBound != null && answer.question.multipleChoicesSupport == null}" th:text="${answer.value}"></li>
+        					<li th:if="${q.question.upperBound == null && q.question.multipleChoicesSupport != null}" th:text="${answer.value}">
+        						<ul>
+        							<li th:each="c : ${answer.choices}" th:choice="c.text"></li>
+        						</ul>
+        					</li>
+        				</ul>
+        			</li>
+        		</ul>
+        	</li>
+        </ul>
+</body>
+</html>

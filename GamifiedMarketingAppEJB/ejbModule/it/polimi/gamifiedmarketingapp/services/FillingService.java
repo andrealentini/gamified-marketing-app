@@ -36,6 +36,16 @@ public class FillingService {
 		throw new NonUniqueResultException("More than one filling with the same registered user and the same master questionnaire");
 	}
 	
+	
+	//TODO: Check if a submitted filling is discriminated in this way or not 
+	public Boolean isFillingSubmitted(Filling filling) {
+		Integer points = filling.getPoints();
+		if(points == null || points == 0)
+			return false;
+		else
+			return true;
+	}
+	
 	public Integer addFilling(Integer registeredUserId, Integer masterQuestionnaireId) {
 		if (registeredUserId == null)
 			throw new IllegalArgumentException("Registered user ID can't be null");

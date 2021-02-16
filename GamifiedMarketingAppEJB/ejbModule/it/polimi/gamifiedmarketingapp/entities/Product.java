@@ -25,7 +25,7 @@ import javax.persistence.TemporalType;
 @Table(name = "product", schema = "gamified_marketing_app_db")
 @NamedQueries({
 	@NamedQuery(name = "Product.findByDate", query = "SELECT p FROM Product p WHERE p.date = :date"),
-	@NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"),
+	@NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p ORDER BY p.date DESC"),
 })
 public class Product implements Serializable {
 

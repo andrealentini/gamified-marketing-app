@@ -56,6 +56,14 @@ public class ProductService {
 		return result;
 	}
 	
+	public List<Product> findAllProducts(){
+		TypedQuery<Product> query = em.createNamedQuery("Product.findAll", Product.class);
+		List<Product> result = query.getResultList();
+		if (result == null || result.size() == 0)
+			return null;
+		return result;
+	}
+	
 	public Integer createProduct(String name, Date date) {
 		if (name == null)
 			throw new IllegalArgumentException("Product name can't be null");

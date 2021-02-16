@@ -62,11 +62,6 @@ public abstract class AbstractController extends HttpServlet {
 				return false;
 			}
 			
-			if (session.getAttribute("product") == null) {
-				response.sendRedirect(homePath);
-				return false;
-			}
-	
 			RegisteredUser registeredUser = (RegisteredUser) session.getAttribute("user");
 			Product product = (Product) session.getAttribute("product");
 			

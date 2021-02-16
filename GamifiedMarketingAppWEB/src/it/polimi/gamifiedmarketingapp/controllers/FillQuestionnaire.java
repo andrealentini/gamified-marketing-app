@@ -1,6 +1,6 @@
 package it.polimi.gamifiedmarketingapp.controllers;
 
-import java.io.IOException;
+import java.io.IOException; 
 import java.util.LinkedList;
 import java.util.List;
 
@@ -88,7 +88,7 @@ public class FillQuestionnaire extends AbstractController {
 		/* Get marketing questionnaire from session */
 		List<AnswerModel> marketingQuestionnaire = null;
 		try {
-			marketingQuestionnaire = (List<AnswerModel>) request.getSession().getAttribute("marketingQuestionnaire");
+			marketingQuestionnaire = (List<AnswerModel>)request.getSession().getAttribute("marketingQuestionnaire");
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
