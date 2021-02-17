@@ -34,12 +34,12 @@
         		<ul th:each="submission : ${questionnaire.usersSubmissions">
         			<li th:text="${submission.key.username}">
         				<ul th:each="answer : ${submission.value}">
-        					<li th:text="${answer.question.text}"></li>
-        					<li th:if="${answer.question.upperBound} == null && answer.question.multipleChoicesSupport == null}" th:text="${answer.text}"></li>
-        					<li th:if="${answer.question.upperBound != null && answer.question.multipleChoicesSupport == null}" th:text="${answer.value}"></li>
-        					<li th:if="${q.question.upperBound == null && q.question.multipleChoicesSupport != null}" th:text="${answer.value}">
+        					<li th:text="${answer.getQuestion().text}"></li>
+        					<li th:if="${answer.rangeValue == null && answer.answerChoices == null}" th:text="${answer.text}"></li>
+        					<li th:if="${answer.rangeValue != null && answer.answerChoices == null}" th:text="${answer.rangeValue}"></li>
+        					<li th:if="${answer.rangeValue == null && answer.answerChoices != null}">
         						<ul>
-        							<li th:each="c : ${answer.choices}" th:choice="c.text"></li>
+        							<li th:each="c : ${answer.choices}" th:choice="c.id"></li>
         						</ul>
         					</li>
         				</ul>

@@ -24,11 +24,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 public class DeleteQuestionnaire extends AbstractController {
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 428978509286851094L;
 	
 
@@ -38,9 +38,23 @@ public class DeleteQuestionnaire extends AbstractController {
 				return;
 			
 			//Getting Paginated MasterQuestionnaire
+			Integer pageNumber;
+			Integer pageSize;
+			
+			try {
+				pageNumber = (Integer)request.getAttribute("pageNumber");
+				pageSize = (Integer)request.getAttribute("pageSize");
+				
+				if (pageNumber == null || pageSize == null || pageNumber==0 || pageSize==0)
+					throw new Exception("Missing or empty credential value");
+			} catch (Exception e) {
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing acceptable values or/and missing of values");
+				return;
+			}
+			
+			
 			List<MasterQuestionnaire> masterQuestionnaires = new ArrayList<MasterQuestionnaire>();
-			Integer pageNumber = (Integer)request.getSession().getAttribute("pageNumber");
-			Integer pageSize = (Integer)request.getSession().getAttribute("pageSize");
+			
 			try {
 				masterQuestionnaires = dataService.getPaginatedMasterQuestionnaires(pageNumber,pageSize);
 			}catch(Exception e) {
@@ -52,9 +66,12 @@ public class DeleteQuestionnaire extends AbstractController {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "Master questionnaire not found.");
 				return;
 			}
+			
 			try {
 			//From paginated MasterQuestionnaire creating QuestionnaireModel
 			List<QuestionnaireModel> questionnaireModels = getQuestionnaireModels(masterQuestionnaires);
+			
+			
 			/* Retrieve to view */
 			String path = "/WEB-INF/InspectionAndDeletion.html";
 			process(request, response, path,
@@ -76,7 +93,7 @@ public class DeleteQuestionnaire extends AbstractController {
 		if(comparator.compare(todayDate,date) == 1) {
 			facadeService.deleteDailyEntry(date);
 		}else {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Can only delete questionnaires older than today");
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Can only delete questionnaires with date older than today");
 		}
 		//TODO: Check if needing a response, maybe triggering a new get request from the user
 	}
