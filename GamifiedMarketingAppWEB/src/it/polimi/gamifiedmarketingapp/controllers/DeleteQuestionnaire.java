@@ -36,6 +36,7 @@ public class DeleteQuestionnaire extends AbstractController {
 			throws ServletException, IOException {
 			if (!initialize(request, response))
 				return;
+			
 			//Getting Paginated MasterQuestionnaire
 			List<MasterQuestionnaire> masterQuestionnaires = new ArrayList<MasterQuestionnaire>();
 			Integer pageNumber = (Integer)request.getSession().getAttribute("pageNumber");

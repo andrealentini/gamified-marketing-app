@@ -7,12 +7,17 @@
 	href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}" />
 </head>
 <body>
+	<div align="right">
+		<a th:href="@{/Home}">Home</a>
+		<a th:href="@{/Logout}">Logout</a>
+	</div>
 	<p align="center">In this section it is possible to create a product and the related Marketing questions. Please input the number of questions to be created</p>
+	
 	<form th:if="${questionNumber} == null" th:action="@/CreateMarketingQuestionnaire" th:object="${questionNumber}" method="post">
 		<input type="number" th:name="${questionNumber}" required></input>
 	</form>
 	
-	<form th:if="${questionNumber} > 0" th:action="@{/CreateDailyEntry}" th:object="${dailyEntry}" method="post">
+	<form th:if="${questionNumber} > 0" th:action="CreateDailyEntry" th:object="${dailyEntry}" method="POST">
 		<input type='text' th:field="#{productName}" required></input>
 		<input type='date' th:field="#{date}" required></input>
 		<input type='file' th:field="#{image}" required></input>

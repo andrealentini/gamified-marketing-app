@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Leaderboard</title>
+<link rel="stylesheet" type="text/css" media="all"
+	href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}" />
+</head>
+<body>
+<form>
+	<h1 align="center">Leaderboard</h1>
+	   <div align="right">
+		        <a th:href="@{/Home}">Home</a>
+		        <a th:href="@{/Logout}">Logout</a>
+	        </div>
+		<fieldset>
+			
+			<div th:each="f : ${fillings}">
+				<p th:text="${f.getRegisteredUser().username}"></p>
+				<p th:text="${f.getPoints()}"></p>
+			</div>
+			
+			<div>
+			<p align="center" th:if="${fillings == null}">
+		    Sorry, there are not people who filled yet the questionnaire 
+	        </p>
+	        
+	       </div>
+		</fieldset>
+</form>
+
+</body>
+</html>

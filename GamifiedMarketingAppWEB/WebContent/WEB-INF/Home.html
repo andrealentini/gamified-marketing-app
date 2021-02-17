@@ -13,6 +13,7 @@
 	<h1 align="center">Gamified Marketing App</h1>
 	<p align="center"
 		th:text="${'Welcome back' + (session.user.name != null ? ', ' + session.user.name : '') + '. You logged in as ' + session.user.role.name + '.'}"></p>
+	<div align="center" th:if="${session.user.getRole().getId==0}">
 	<div>
 		<h3>Product of the day</h3>
 		<div>
@@ -20,6 +21,52 @@
 			<a th:href="@{/FillQuestionnaire}">Fill Questionnaire</a>
 		</div>
 	</div>
+	
+	<div>
+		<div>
+			<a th:href="@{/Leaderboard}">Leaderboard</a>
+		</div>
+	</div>
+	
+	<form>
+	<h1 align="center">Reviews</h1>
+		<fieldset>
+			<div th:each="f : ${dataService.getReviews(product.id,5)}">
+				<p th:text="${f.title}"></p>
+				<p th:text="${f.text}"></p>
+			</div>
+			
+			<div>
+	        <p align="center" th:if="${dataService.getReviews(product.id,5) == null}">
+		     NO REVIEWS
+	        </p>
+	        </div>
+		</fieldset>
+		
+	
+    </form>
+    </div>
+    
+    
+    <div align="center" th:if="${session.user.getRole().getId==1}">
+    
+    <div>
+		<div>
+			<a th:href="@{/CreationPage}"> Create a Daily Entry </a>
+		</div>
+	</div>
+	
+	
+     <div>
+		<div>
+			<a th:href="@{/InspectionAndDeletion}"> Inspect a/o delete questionnaire </a>
+		</div>
+	</div>
+	
+    
+    
+    </div>
+    
 
 </body>
 </html>
