@@ -8,7 +8,7 @@
 </head>
 <body>
 	<p align="center">In this section it is possible to create a product and the related Marketing questions. Please input the number of questions to be created</p>
-	<form th:action="@/CreateMarketingQuestionnaire" th:object="${questionNumber}" method="post">
+	<form th:if="${questionNumber} == null" th:action="@/CreateMarketingQuestionnaire" th:object="${questionNumber}" method="post">
 		<input type="number" th:name="${questionNumber}" required></input>
 	</form>
 	
@@ -17,8 +17,11 @@
 		<input type='date' th:field="#{date}" required></input>
 		<input type='file' th:field="#{image}" required></input>
 		<th:block th:each="i: ${#numbers.sequence(0, questionNumber - 1)}">
-    		<input type='number' th:field="#{marketingQuestions[i].upperBound}" required></input>
-    		<input type='boolean' th:field="#{marketingQuestions[i].upperBound}" required></input>
+			<input type='text' th:field="#{marketingQuestions[i].text" required>
+    		<div th:with="questionType=-1">
+  				<input type='number' th:field="#{marketingQuestions[i].upperBound}" required></input>
+    			<input type='boolean' th:field="#{marketingQuestions[i].upperBound}" required></input>
+			</div>
 		</th:block>
 	</form>
 	
