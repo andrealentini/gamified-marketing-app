@@ -16,10 +16,11 @@ public class GoToHomePage extends AbstractController {
 		if (!initialize(request, response))
 			return;
 		
+		
 		String path = "/WEB-INF/Home.html";
 		process(request, response, path,
-				new String[] {"product"},
-				new Object[] {product});
+				new String[] {"product","dataService"},
+				new Object[] {product,dataService});
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

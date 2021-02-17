@@ -94,11 +94,7 @@ public class CheckLogin extends HttpServlet {
 			request.getSession().setAttribute("user", registeredUser);
 			if (product != null)
 				request.getSession().setAttribute("product", product);
-			if (registeredUser.getRole().getName().contains("ADMIN")) {
-				path = getServletContext().getContextPath() + "/InspectionAndDeletion";
-			}else {
-				path = getServletContext().getContextPath() + "/Home";
-			}
+			path = getServletContext().getContextPath() + "/Home";
 			response.sendRedirect(path);
 		}
 	}

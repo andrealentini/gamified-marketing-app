@@ -17,9 +17,7 @@ import it.polimi.gamifiedmarketingapp.wrappers.QuestionWrapper;
 
 public class CreateDailyEntry extends AbstractController {
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -3092699228610397652L;
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)

@@ -7,17 +7,24 @@
 	href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}" />
 </head>
 <body>
-	<form th:action="@{/DeleteQuestionnaire}" method="GET">
-    <input type="number" th:name="pageNumber" th:placeholder="pageNumber" />
-    <input type="number" th:name="pageSize" th:placeholder="pageSize" />
+	<div align="right">
+		<a th:href="@{/Home}">Home</a>
+		<a th:href="@{/Logout}">Logout</a>
+	</div>
+	<form action="DeleteQuestionnaire" method="GET">
+    <input type="number" name="pageNumber" placeholder="pageNumber" />
+    <input type="number" name="pageSize" placeholder="pageSize" />
     <div class="clearfix">
         <button type="submit">Inspect</button>
     </div>
-</form>
+   </form>
+   <div th:if="${questionnaires != null}">
         <ul th:each="questionnaire : ${questionnaires}">
-        	<li th:text="${questionnaire.productName} + ' ' + ${questionnaire.questionnaireDate}"><form class="button" th:action="@{/DeleteQuestionnaire}" method="POST">
+        	<li th:text="${questionnaire.productName} + ' ' + ${questionnaire.questionnaireDate}">
+        	        <form class="button" action="DeleteQuestionnaire" method="POST">
                         <input type="submit" th:name="{date}" th:field="${questionnaire.questionnaireDate}"/>
-                    </form></li>
+                    </form>
+            </li>
         	<li>
         		<ul>
         			<li th:each="canceledUser : ${questionnaire.usersCanceled}" th:text="${canceledUser.username}"></li>
@@ -40,5 +47,6 @@
         		</ul>
         	</li>
         </ul>
+    </div>
 </body>
 </html>
