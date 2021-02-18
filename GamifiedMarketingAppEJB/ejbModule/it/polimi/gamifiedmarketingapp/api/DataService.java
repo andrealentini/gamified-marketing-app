@@ -131,6 +131,9 @@ public class DataService extends AbstractFacadeService {
 		return masterQuestionnaires;
 	}
 	
+	public List<Questionnaire> getStatisticalQuestionnaires(){
+		return questionnaireService.findAllStatisticalQuestionnaires();
+	}
 
 	
 

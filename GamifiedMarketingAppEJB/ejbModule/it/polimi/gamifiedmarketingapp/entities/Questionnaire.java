@@ -10,11 +10,16 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "questionnaire", schema = "gamified_marketing_app_db")
+@NamedQueries({
+	@NamedQuery(name = "Questionnaire.findAllStatisticalQuestionnaires", query = "SELECT q FROM Questionnaire q WHERE q.isMarketing = FALSE"),
+})
 public class Questionnaire implements Serializable {
 
 	private static final long serialVersionUID = -5169875463616347893L;
