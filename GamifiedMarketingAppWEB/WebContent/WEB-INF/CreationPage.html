@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
-<title>Creation</title>
+<title>CreationPage</title>
 <link rel="stylesheet" type="text/css" media="all"
 	href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}" />
 </head>
@@ -12,19 +12,57 @@
 		<a th:href="@{/Logout}">Logout</a>
 	</div>
 	<p align="center">In this section it is possible to create a product and the related Marketing questions. Please input the number of questions to be created</p>
-	<form th:action="CreateMarketingQuestionnaire" th:object="${questionNumber}" method="post">
-		<input type="number" th:name="${questionNumber}" placeholder="Number" required></input>
-	</form>
 	
-	<form th:if="${questionNumber} > 0" th:action="CreateDailyEntry" th:object="${dailyEntry}" method="POST">
-		<input type='text' th:field="#{productName}" required></input>
-		<input type='date' th:field="#{date}" required></input>
-		<input type='file' th:field="#{image}" required></input>
-		<th:block th:each="i: ${#numbers.sequence(0, questionNumber - 1)}">
-    		<input type='number' th:field="#{marketingQuestions[i].upperBound}" required></input>
-    		<input type='boolean' th:field="#{marketingQuestions[i].upperBound}" required></input>
-		</th:block>
-	</form>
 	
+	<div th:if="${marketingQuestions} == null" align="center">
+	<form  action="CreateMarketingQuestionnaire" method="GET">
+		<label for="textQuestions">Number of text question</label>
+		<input id="textQuestions" type="number" name="textQuestions" required/>
+		<label for="rangedQuestions">Number of ranged question</label>
+		<input id="rangedQuestions" type="number" name="rangedQuestions" required/>
+		<label for="choiceQuestions">Number of choice question</label>
+		<input id="choiceQuestions" type="number" name="choiceQuestions" required/>
+		<label for="choices">Maximum number of choices in case of a choiced question</label>
+		<input id="choices" type="number" name="choices" required/>
+		<input type="submit" value="Submit"/>
+	</form>	
+	</div>
+	<form th:if="${marketingQuestions} != null" th:action="@{/CreateDailyEntry}" method="POST">
+		<label for="productN">Name of the product</label>
+		<input type='text' id="productN" name="productName" required></input>
+		<label for="d">Date of the product</label>
+		<input type='date' id="d" name="date" th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"
+            placeholder="yyyy-mm-dd" required></input>
+		<div style="width:100%" align="center" th:each="q,status : ${marketingQuestions}">
+				<p align="left" th:text="|Question Number ${status.index}|"></p>
+				<div th:if="${q.upperBound} != null">
+					<input placeholder="text" type='text' th:field="${q.text}" th:name="|${status.index}-text-r|" required></input>
+					<input placeholder="range" type='number' th:field="${q.upperBound}" th:name="|${status.index}-range|" required></input>
+				</div> 
+				<div th:if="${q.multipleChoicesSupport} != null">
+					<input placeholder="text" type='text' th:field="${q.text}" th:name="|${status.index}-text-c|" required></input>
+					<div th:each="c,stat : ${q.choices}">
+						<input placeholder="choice" type='text' th:field="${c}" th:name="|${status.index}-choice-${stat.index}|" />
+					</div>
+				</div> 
+				<div th:if="${q.multipleChoicesSupport} == null and ${q.upperBound} == null">
+					<input placeholder="text" type='text' th:field="${q.text}" th:name="|${status.index}-text-t|" required></input>
+				</div>    	
+				<hr>			
+		</div>
+		<input
+						th:each="statisticalQuest: statisticalQuestionnaires"
+						th:name="|stat-${statisticalQuest}.id|"
+						type="checkbox"/>
+		<div th:each="statisticalQuestionnaire , iter : ${statisticalQuestionnaires}">
+			<p align="left" th:text="|Questionnaire number ${iter.index}|"></p>
+			<div th:each="question : ${statisticalQuestionnaire.questions}">
+				<p th:text="${question.text}"></p>
+			</div>
+			<hr>
+		</div>
+		<input type="submit" value="Submit"/>
+	</form>
+
 </body>
 </html>

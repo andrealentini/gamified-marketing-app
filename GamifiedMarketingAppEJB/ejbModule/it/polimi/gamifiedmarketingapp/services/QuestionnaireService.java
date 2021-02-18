@@ -1,9 +1,13 @@
 package it.polimi.gamifiedmarketingapp.services;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 
+import it.polimi.gamifiedmarketingapp.entities.Filling;
 import it.polimi.gamifiedmarketingapp.entities.Questionnaire;
 
 @Stateless
@@ -27,5 +31,14 @@ public class QuestionnaireService {
 		em.flush();
 		return questionnaire.getId();
 	}
+	
+	public List<Questionnaire> findAllStatisticalQuestionnaires() {
+		List<Questionnaire> statisticalQuestionnaires = em.createNamedQuery("Questionnaire.findAllStatisticalQuestionnaires", Questionnaire.class)
+				.getResultList();
+		if (statisticalQuestionnaires == null || statisticalQuestionnaires.size() == 0)
+			return null;
+		return statisticalQuestionnaires;
+	}
+	
 
 }
