@@ -13,11 +13,11 @@
 		        <a th:href="@{/Home}">Home</a>
 		        <a th:href="@{/Logout}">Logout</a>
 	        </div>
-		<fieldset>
 			
 			<div th:each="f : ${fillings}">
 				<p th:text="${f.getRegisteredUser().username}"></p>
 				<p th:text="${f.getPoints()}"></p>
+				<hr style="border-top: 3px solid #bbb;">
 			</div>
 			
 			<div>
@@ -26,7 +26,6 @@
 	        </p>
 	        
 	       </div>
-		</fieldset>
 </form>
 
 </body>

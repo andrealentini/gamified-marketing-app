@@ -1,18 +1,17 @@
 package it.polimi.gamifiedmarketingapp.controllers;
 
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
-import it.polimi.gamifiedmarketingapp.api.DataService;
 import it.polimi.gamifiedmarketingapp.entities.Answer;
 import it.polimi.gamifiedmarketingapp.entities.AnswerChoice;
 import it.polimi.gamifiedmarketingapp.entities.Filling;
 import it.polimi.gamifiedmarketingapp.entities.MasterQuestionnaire;
-import it.polimi.gamifiedmarketingapp.entities.RegisteredUser;
+import it.polimi.gamifiedmarketingapp.entities.Product;
 import it.polimi.gamifiedmarketingapp.models.AnswerModel;
 import it.polimi.gamifiedmarketingapp.models.ChoiceModel;
 import it.polimi.gamifiedmarketingapp.models.QuestionnaireModel;
@@ -20,12 +19,13 @@ import it.polimi.gamifiedmarketingapp.models.UserModel;
 import it.polimi.gamifiedmarketingapp.utils.DateComparator;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringEscapeUtils;
 
+
+@WebServlet("/DeleteQuestionnaire")
 public class DeleteQuestionnaire extends AbstractController {
 
 
@@ -38,14 +38,12 @@ public class DeleteQuestionnaire extends AbstractController {
 				return;
 			
 			//Getting Paginated MasterQuestionnaire
-			Integer pageNumber;
-			Integer pageSize;
+			Integer questionnairesNumber;
 			
 			try {
-				pageNumber = (Integer)request.getAttribute("pageNumber");
-				pageSize = (Integer)request.getAttribute("pageSize");
+				questionnairesNumber = Integer.parseInt(request.getParameter("page"));
 				
-				if (pageNumber == null || pageSize == null || pageNumber==0 || pageSize==0)
+				if (questionnairesNumber == null || questionnairesNumber==0)
 					throw new Exception("Missing or empty credential value");
 			} catch (Exception e) {
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing acceptable values or/and missing of values");
@@ -56,14 +54,19 @@ public class DeleteQuestionnaire extends AbstractController {
 			List<MasterQuestionnaire> masterQuestionnaires = new ArrayList<MasterQuestionnaire>();
 			
 			try {
-				masterQuestionnaires = dataService.getPaginatedMasterQuestionnaires(pageNumber,pageSize);
+				
+				List<Product> products= dataService.getProducts(Math.min(Math.abs(questionnairesNumber), dataService.getAllProducts().size()));
+				for(it.polimi.gamifiedmarketingapp.entities.Product product : products)
+				{
+					masterQuestionnaires.add(product.getMasterQuestionnaire());
+				}
 			}catch(Exception e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 				return;
 			}
 			if(masterQuestionnaires.isEmpty()) {
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, "Master questionnaire not found.");
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "Master questionnaire not found1.");
 				return;
 			}
 			
@@ -110,29 +113,31 @@ public class DeleteQuestionnaire extends AbstractController {
 		List<Filling> fillings = dataService.getFillings(masterQuestionnaire.getId());
 		QuestionnaireModel questionnaireModel = new QuestionnaireModel
 				(masterQuestionnaire.getProduct().getName(), masterQuestionnaire.getProduct().getDate());
-		questionnaireModel.setUsersCanceled(getCanceledUsers(fillings));
-		questionnaireModel.setUsersSubmissions(getUsersSubmissions(fillings));
+		questionnaireModel.setUsersModel(getUsers(fillings));
 		return questionnaireModel;
 		
 	}
 	
-	private List<UserModel> getCanceledUsers(List<Filling> fillings) {
+	/*private List<UserModel> getCanceledUsers(List<Filling> fillings) {
 		List<UserModel> usersCanceled =  new ArrayList<UserModel>();
 		for(Filling filling : fillings) {
 			if(!dataService.isFillingSubmitted(filling))
 				usersCanceled.add(getUserModel(filling.getRegisteredUser()));
 		}
 		return usersCanceled;
-	}
+	}*/
 	
-	private HashMap<UserModel,List<AnswerModel>> getUsersSubmissions(List<Filling> fillings){
-		HashMap<UserModel,List<AnswerModel>> usersSubmissions = new  HashMap<UserModel,List<AnswerModel>>();
+	private List<UserModel> getUsers(List<Filling> fillings){
+		List<UserModel> usersSubmissions = new ArrayList<UserModel>();
 		List<AnswerModel> answers = new ArrayList<AnswerModel>();
 		for(Filling filling : fillings) {
-			if(dataService.isFillingSubmitted(filling)) {
+			
+			if(!dataService.isFillingSubmitted(filling))
+				usersSubmissions.add(new UserModel(filling.getRegisteredUser().getSurname()));
+			else if(dataService.isFillingSubmitted(filling)) {
 				answers = getAnswerModels(filling.getAnswers());
-			}
-			usersSubmissions.put(getUserModel(filling.getRegisteredUser()),answers);
+			usersSubmissions.add(new UserModel(filling.getRegisteredUser().getUsername(),answers));
+		}
 		}
 		return usersSubmissions;
 	}
@@ -159,9 +164,6 @@ public class DeleteQuestionnaire extends AbstractController {
 		return choiceModels;
 	}
 		
-	private UserModel getUserModel(RegisteredUser user) {
-		return new UserModel(user.getUsername());
-	}
 
 }
 

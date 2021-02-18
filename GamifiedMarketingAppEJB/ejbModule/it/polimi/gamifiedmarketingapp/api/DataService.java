@@ -24,6 +24,11 @@ public class DataService extends AbstractFacadeService {
 		return productService.findProductByDate(date);
 	}
 	
+	public List<Product> getAllProducts()
+	{
+		return productService.findAllProducts();
+	}
+	
 	public List<Product> getProducts(Integer limit) {
 		return productService.findLimitedNumberOfProducts(limit);
 	}
@@ -99,24 +104,6 @@ public class DataService extends AbstractFacadeService {
 		return questionnaire.getQuestions();
 	}
 	
-	//TODO: add exception handling to last three methods
-	public List<MasterQuestionnaire> getPaginatedMasterQuestionnaires(Integer pageNumber,Integer pageSize){
-		List<MasterQuestionnaire> masterQuestionnaires = new ArrayList<MasterQuestionnaire>();
-		if (pageNumber == null || pageSize == null) {
-			//Return all the masterQuestionnaires ordered by product date
-			masterQuestionnaires = getAllMasterQuestionnaires();
-		}else {
-			//Taking pageNumber * pageSize elements and then taking the last pageSize elements
-			List<Product> products = productService.findLimitedNumberOfProducts(pageNumber * pageSize);
-			List<Product> paginatedProducts = products.subList(products.size()- pageSize, products.size());
-			//For each product taking the respective MasterQuestionnaires
-			masterQuestionnaires = getMasterQuestionnairesFromProducts(paginatedProducts);
-		}
-		if(masterQuestionnaires.isEmpty())
-			throw new EntryNotFoundException("Master questionnaires not found");
-		return masterQuestionnaires;
-		
-	}
 	
 	private List<MasterQuestionnaire> getAllMasterQuestionnaires(){
 		List<Product> products = productService.findAllProducts();

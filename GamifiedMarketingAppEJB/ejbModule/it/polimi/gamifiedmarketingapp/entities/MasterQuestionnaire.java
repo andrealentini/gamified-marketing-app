@@ -15,6 +15,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 @Entity
@@ -43,7 +44,10 @@ public class MasterQuestionnaire implements Serializable {
 	private Product product;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "masterQuestionnaire", cascade = CascadeType.REMOVE)
+	@OrderBy("points DESC")
 	private List<Filling> fillings;
+	
+
 	
 	public MasterQuestionnaire() {
 	}

@@ -13,11 +13,13 @@
 	<h1 align="center">Gamified Marketing App</h1>
 	<p align="center"
 		th:text="${'Welcome back' + (session.user.name != null ? ', ' + session.user.name : '') + '. You logged in as ' + session.user.role.name + '.'}"></p>
-	<div align="center" th:if="${session.user.getRole().getId==0}">
+	<div align="center" th:if="${session.user.getRole().getId==2}">
+	<div th:if="${product!=null}">
 	<div>
 		<h3>Product of the day</h3>
 		<div>
 			<h4 th:text="${product.name}"></h4>
+			<!-- <img alt="photo" th:src="*{'data:image/png;base64,'+ dataService.getPicture(product.id)}"> -->
 			<a th:href="@{/FillQuestionnaire}">Fill Questionnaire</a>
 		</div>
 	</div>
@@ -30,10 +32,10 @@
 	
 	<form>
 	<h1 align="center">Reviews</h1>
-		<fieldset>
 			<div th:each="f : ${dataService.getReviews(product.id,5)}">
 				<p th:text="${f.title}"></p>
 				<p th:text="${f.text}"></p>
+				<hr style="border-top: 3px solid #bbb;">
 			</div>
 			
 			<div>
@@ -41,10 +43,10 @@
 		     NO REVIEWS
 	        </p>
 	        </div>
-		</fieldset>
 		
 	
     </form>
+    </div>
     </div>
     
     

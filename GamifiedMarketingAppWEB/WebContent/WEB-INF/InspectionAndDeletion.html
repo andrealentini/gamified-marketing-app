@@ -11,29 +11,32 @@
 		<a th:href="@{/Home}">Home</a>
 		<a th:href="@{/Logout}">Logout</a>
 	</div>
+	<i>Insert number of questionnaire you want display</i>
 	<form action="DeleteQuestionnaire" method="GET">
-    <input type="number" name="pageNumber" placeholder="pageNumber" />
-    <input type="number" name="pageSize" placeholder="pageSize" />
+    <input type="text" name="page" placeholder="number" />
     <div class="clearfix">
         <button type="submit">Inspect</button>
     </div>
    </form>
    <div th:if="${questionnaires != null}">
-        <ul th:each="questionnaire : ${questionnaires}">
-        	<li th:text="${questionnaire.productName} + ' ' + ${questionnaire.questionnaireDate}">
+        <div th:each="questionnaire : ${questionnaires}">
+        	<div th:text="${questionnaire.productName} + ' ' + ${questionnaire.questionnaireDate}">
         	        <form class="button" action="DeleteQuestionnaire" method="POST">
                         <input type="submit" th:name="{date}" th:field="${questionnaire.questionnaireDate}"/>
                     </form>
-            </li>
-        	<li>
+            </div>
+        	<!-- <li>
         		<ul>
         			<li th:each="canceledUser : ${questionnaire.usersCanceled}" th:text="${canceledUser.username}"></li>
    				</ul>
         	</li>
-        	<li>
-        		<ul th:each="submission : ${questionnaire.usersSubmissions">
-        			<li th:text="${submission.key.username}">
-        				<ul th:each="answer : ${submission.value}">
+        	 -->
+        	<div>
+        		<div th:each="submission : ${questionnaires}">
+        			<div th:each="user : ${submission.getUsersModel()}">
+        			   <div th:text="${user.username}"></div>
+        			   <div th:if="${answer!=null}">
+        				<ul th:each="answer : ${user.getUsersAnswer()}">
         					<li th:text="${answer.getQuestion().text}"></li>
         					<li th:if="${answer.rangeValue == null && answer.answerChoices == null}" th:text="${answer.text}"></li>
         					<li th:if="${answer.rangeValue != null && answer.answerChoices == null}" th:text="${answer.rangeValue}"></li>
@@ -43,10 +46,11 @@
         						</ul>
         					</li>
         				</ul>
-        			</li>
-        		</ul>
-        	</li>
-        </ul>
+        			   </div>
+        			</div>
+        		</div>
+        	</div>
+        </div>
     </div>
 </body>
 </html>
