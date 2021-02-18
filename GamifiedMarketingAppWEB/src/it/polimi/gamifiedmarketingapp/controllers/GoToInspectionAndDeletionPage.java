@@ -24,7 +24,7 @@ public class GoToInspectionAndDeletionPage extends AbstractController{
 						new String[] {"dataService"},
 						new Object[] {dataService});
 			}
-
+				
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 				doGet(request, response);

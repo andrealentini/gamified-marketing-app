@@ -3,11 +3,14 @@ package it.polimi.gamifiedmarketingapp.controllers;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import it.polimi.gamifiedmarketingapp.models.QuestionNumberModel;
 
+@WebServlet("/CreateMarketingQuestionnaire")
 public class CreateMarketingQuestionnaire extends AbstractController {
 	
 	/**
@@ -21,7 +24,6 @@ public class CreateMarketingQuestionnaire extends AbstractController {
 			throws ServletException, IOException {
 		try {
 			super.initialize(request, response);
-			this.questions = 0;
 			return true;
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -34,7 +36,7 @@ public class CreateMarketingQuestionnaire extends AbstractController {
 			throws ServletException, IOException {
 			if (!initialize(request, response))
 				return;
-			String path = "/WEB-INF/CreateDailyEntry.html";
+			String path = "/WEB-INF/CreationPage.html";
 			process(request, response, path,
 					new String[] {"questionNumber"},
 					new Integer[] {this.questions});
@@ -42,8 +44,14 @@ public class CreateMarketingQuestionnaire extends AbstractController {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		if (!initialize(request, response))
+			return;
 		 this.questions = (Integer)request.getSession().getAttribute("questionNumber");
-		
+		 this.questions = 3;
+		 String path = "/WEB-INF/CreationPage.html";
+		 process(request, response, path,
+					new String[] {"questionNumber"},
+					new Object[] {this.questions});
 	}
 	
 	

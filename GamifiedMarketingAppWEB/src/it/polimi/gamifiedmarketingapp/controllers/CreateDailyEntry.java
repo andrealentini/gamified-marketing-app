@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import it.polimi.gamifiedmarketingapp.utils.DateComparator;
 import it.polimi.gamifiedmarketingapp.wrappers.QuestionWrapper;
 
+@WebServlet("/CreateDailyEntry")
 public class CreateDailyEntry extends AbstractController {
 
 
@@ -54,7 +56,9 @@ public class CreateDailyEntry extends AbstractController {
 			return;
 		}
 		//TODO: See if post has to return something
+		
 	}
 	
 	
 }
+

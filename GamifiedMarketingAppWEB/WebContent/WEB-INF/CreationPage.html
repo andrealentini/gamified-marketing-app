@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
-<title>Creation</title>
+<title>CreationPage</title>
 <link rel="stylesheet" type="text/css" media="all"
 	href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}" />
 </head>
@@ -13,22 +13,42 @@
 	</div>
 	<p align="center">In this section it is possible to create a product and the related Marketing questions. Please input the number of questions to be created</p>
 	
-	<form th:if="${questionNumber} == null" th:action="@/CreateMarketingQuestionnaire" th:object="${questionNumber}" method="post">
-		<input type="number" th:name="${questionNumber}" required></input>
-	</form>
 	
-	<form th:if="${questionNumber} > 0" th:action="CreateDailyEntry" th:object="${dailyEntry}" method="POST">
-		<input type='text' th:field="#{productName}" required></input>
-		<input type='date' th:field="#{date}" required></input>
-		<input type='file' th:field="#{image}" required></input>
+	<div th:if="${questionNumber} == null" align="center">
+	<p>Input the question number for the marketing questions</p>
+	<form  action="#" th:action="@{/CreateMarketingQuestionnaire}" method="POST">
+		<input type="number" id="questionNumber" name="questionNumber" required/>
+		<input type="submit" value="Submit"/>
+	</form>	
+	</div>
+	<form th:if="${questionNumber} != null" th:action="@{/CreateDailyEntry}" th:object="${dailyEntry}" method="POST">
+		<label for="productName">Name of the product</label>
+		<input type='text' id="productName" th:field="${productName}" required></input>
+		<label for="date">Date of the product</label>
+		<input type='date' id="date" th:field="${date}" required></input>
+		<label for="image">Image of the product</label>
+		<input type='file' id="image" th:field="${image}" required></input>
+		<label for="statisticalId">Id of the statistical section</label>
+		<input type='number' id="statisticalId" th:field="${statisticalSectionId}" required></input>
 		<th:block th:each="i: ${#numbers.sequence(0, questionNumber - 1)}">
-			<input type='text' th:field="#{marketingQuestions[i].text" required>
+			<input type='text' th:field="${marketingQuestions[__${i}__].text" required>
     		<div th:with="questionType=-1">
-  				<input type='number' th:field="#{marketingQuestions[i].upperBound}" required></input>
-    			<input type='boolean' th:field="#{marketingQuestions[i].upperBound}" required></input>
+    			<select>
+    				<option th:if="${questionType} == -1" th:name="${questionType}" th:value="0">Multiple Choice</option>
+    				<option th:if="${questionType} == -1" th:name="${questionType}" th:value="1">Text</option>
+    				<option th:if="${questionType} == -1" th:name="${questionType}" th:value="2">Ranged</option>
+				</select>
+  				<input th:if="${questionType} == 2" type='number' th:field="${marketingQuestions[__${i}__].upperBound}" required></input>
+  				<input th:if="${questionType} == 1" type='text' th:field="${marketingQuestions[__${i}__].text}" required></input>
+    			<div th:if="${questionType} == 1" th:with="numberOfChoices=-1">
+    				<input th:if="${numberOfChoices} == -1" type='number' th:name="${numberOfChoices}" th:value="${numberOfChoices}" required></input>
+    				<th:block th:if="${numberOfChoices} != -1" th:each="j: ${#numbers.sequence(0, questionNumber - 1)}">
+    					<input type='text' th:field="${marketingQuestions[__${i}__].choices[___${j}__]" required>
+    				</th:block>
+    			</div>
 			</div>
 		</th:block>
 	</form>
-	
+
 </body>
 </html>
