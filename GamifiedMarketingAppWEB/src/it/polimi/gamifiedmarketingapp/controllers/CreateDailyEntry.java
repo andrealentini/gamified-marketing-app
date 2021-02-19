@@ -113,7 +113,7 @@ public class CreateDailyEntry extends AbstractController {
 	private List<QuestionWrapper> insertRangedQuestion(List<QuestionWrapper> marketingQuestionnaire,Integer id,String questionText,HttpServletRequest request) {
 		String attributeName = String.valueOf(id) + "-range";
 		Integer range =  Integer.parseInt(request.getParameter(attributeName));
-		QuestionWrapper rangedQuestion = new QuestionWrapper(questionText,null,null,range,null);
+		QuestionWrapper rangedQuestion = new QuestionWrapper(questionText,false,null,range,null);
 		marketingQuestionnaire.add(rangedQuestion);
 		return marketingQuestionnaire;
 	}
@@ -129,7 +129,7 @@ public class CreateDailyEntry extends AbstractController {
 			}
 		}
 		request.getSession().removeAttribute("choices");
-		QuestionWrapper choiceQuestion = new QuestionWrapper(questionText,null,null,null,choices);
+		QuestionWrapper choiceQuestion = new QuestionWrapper(questionText,false,null,null,choices);
 		marketingQuestionnaire.add(choiceQuestion);
 		return marketingQuestionnaire;
 	}

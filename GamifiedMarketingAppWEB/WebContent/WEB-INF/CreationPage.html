@@ -17,13 +17,13 @@
 	<div th:if="${marketingQuestions} == null" align="center">
 	<form  action="CreateMarketingQuestionnaire" method="GET">
 		<label for="textQuestions">Number of text question</label>
-		<input id="textQuestions" type="number" name="textQuestions" required/>
+		<input min=0 step=1 id="textQuestions" type="number" name="textQuestions" required/>
 		<label for="rangedQuestions">Number of ranged question</label>
-		<input id="rangedQuestions" type="number" name="rangedQuestions" required/>
+		<input min=0 step=1 id="rangedQuestions" type="number" name="rangedQuestions" required/>
 		<label for="choiceQuestions">Number of choice question</label>
-		<input id="choiceQuestions" type="number" name="choiceQuestions" required/>
+		<input min=0 step=1 id="choiceQuestions" type="number" name="choiceQuestions" required/>
 		<label for="choices">Maximum number of choices in case of a choiced question</label>
-		<input id="choices" type="number" name="choices" required/>
+		<input min=0 step=1 id="choices" type="number" name="choices" required/>
 		<input type="submit" value="Submit"/>
 	</form>	
 	</div>
@@ -37,7 +37,7 @@
 				<p align="left" th:text="|Question Number ${status.index}|"></p>
 				<div th:if="${q.upperBound} != null">
 					<input placeholder="text" type='text' th:field="${q.text}" th:name="|${status.index}-text-r|" required></input>
-					<input placeholder="range" type='number' th:field="${q.upperBound}" th:name="|${status.index}-range|" required></input>
+					<input placeholder="range" min=0 step=1 type='number' th:field="${q.upperBound}" th:name="|${status.index}-range|" required></input>
 				</div> 
 				<div th:if="${q.multipleChoicesSupport} != null">
 					<input placeholder="text" type='text' th:field="${q.text}" th:name="|${status.index}-text-c|" required></input>
