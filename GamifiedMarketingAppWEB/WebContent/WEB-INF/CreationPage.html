@@ -51,8 +51,8 @@
 				<hr>			
 		</div>
 		<input
-						th:each="statisticalQuest: statisticalQuestionnaires"
-						th:name="|stat-${statisticalQuest}.id|"
+						th:each="statisticalQuest: ${statisticalQuestionnaires}"
+						th:name="'stat-' + ${statisticalQuest.id}"
 						type="checkbox"/>
 		<div th:each="statisticalQuestionnaire , iter : ${statisticalQuestionnaires}">
 			<p align="left" th:text="|Questionnaire number ${iter.index}|"></p>

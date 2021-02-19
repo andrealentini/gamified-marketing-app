@@ -88,9 +88,9 @@ public class CreateDailyEntry extends AbstractController {
 		List<Questionnaire> statisticalQuestionnaires = dataService.getStatisticalQuestionnaires();
 		for(Questionnaire q : statisticalQuestionnaires) {
 			String attributeSearch = "stat-" + String.valueOf(q.getId());
-			Integer questionnaireId =  Integer.parseInt(request.getParameter(attributeSearch));
-			if(questionnaireId != null)
-				return questionnaireId;
+			if (request.getParameter(attributeSearch).contains("on")) {
+				return q.getId();
+			}
 		}
 		return null;
 	}
