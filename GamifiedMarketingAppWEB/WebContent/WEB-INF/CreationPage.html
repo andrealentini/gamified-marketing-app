@@ -41,6 +41,8 @@
 				</div> 
 				<div th:if="${q.multipleChoicesSupport} != null">
 					<input placeholder="text" type='text' th:field="${q.text}" th:name="|${status.index}-text-c|" required></input>
+					<label for="exclusive">Exclusive choice</label>
+					<input id="exlclusive" type = "checkbox" th:name="|${status.index}-choice-x|"/>
 					<div th:each="c,stat : ${q.choices}">
 						<input placeholder="choice" type='text' th:field="${c}" th:name="|${status.index}-choice-${stat.index}|" />
 					</div>

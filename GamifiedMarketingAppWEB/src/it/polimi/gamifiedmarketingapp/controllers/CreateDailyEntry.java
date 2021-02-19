@@ -79,12 +79,13 @@ public class CreateDailyEntry extends AbstractController {
 				System.out.println("questionText:" + questionText);
 				if(questionText != null) {
 					//Check the type
-					if(type == "t")
-						marketingQuestionnaire = insertTextQuestion(marketingQuestionnaire,i,questionText,request);
-					else if(type == "c")
+					if(type == "t") {
+						marketingQuestionnaire = insertTextQuestion(marketingQuestionnaire,i,questionText,request);	
+					}else if(type == "c") {
 						marketingQuestionnaire = insertChoiceQuestion(marketingQuestionnaire,i,questionText,request);
-					else if(type == "r")
+					}else if(type == "r") {
 						marketingQuestionnaire = insertRangedQuestion(marketingQuestionnaire,i,questionText,request);
+					}
 				}
 			}
 		}
@@ -96,21 +97,24 @@ public class CreateDailyEntry extends AbstractController {
 		List<Questionnaire> statisticalQuestionnaires = dataService.getStatisticalQuestionnaires();
 		for(Questionnaire q : statisticalQuestionnaires) {
 			String attributeSearch = "stat-" + String.valueOf(q.getId());
-			if (request.getParameter(attributeSearch).contains("on")) {
+			if (request.getParameter(attributeSearch) != null) {
+				if(request.getParameter(attributeSearch).contains("on"))
 				return q.getId();
 			}
 		}
 		return null;
 	}
 	//String text, Boolean optional, Boolean multipleChoicesSupport, Integer upperBound, List<String> choices
-	private List<QuestionWrapper> insertTextQuestion(List<QuestionWrapper> marketingQuestionnaire,Integer id,String questionText,HttpServletRequest request) {
+	public List<QuestionWrapper> insertTextQuestion(List<QuestionWrapper> marketingQuestionnaire,Integer id,String questionText,HttpServletRequest request) {
+		System.out.println("text");
 		QuestionWrapper textQuestion = new QuestionWrapper(questionText,false,null,null,null);
 		marketingQuestionnaire.add(textQuestion);
 		System.out.println("Added textQuestion " + questionText);
 		return marketingQuestionnaire;
 	}
 	
-	private List<QuestionWrapper> insertRangedQuestion(List<QuestionWrapper> marketingQuestionnaire,Integer id,String questionText,HttpServletRequest request) {
+	public List<QuestionWrapper> insertRangedQuestion(List<QuestionWrapper> marketingQuestionnaire,Integer id,String questionText,HttpServletRequest request) {
+		System.out.println("going in ranged");
 		String attributeName = String.valueOf(id) + "-range";
 		Integer range =  Integer.parseInt(request.getParameter(attributeName));
 		QuestionWrapper rangedQuestion = new QuestionWrapper(questionText,false,null,range,null);
@@ -118,18 +122,26 @@ public class CreateDailyEntry extends AbstractController {
 		return marketingQuestionnaire;
 	}
 	
-	private List<QuestionWrapper> insertChoiceQuestion(List<QuestionWrapper> marketingQuestionnaire,Integer id,String questionText,HttpServletRequest request) {
+	public List<QuestionWrapper> insertChoiceQuestion(List<QuestionWrapper> marketingQuestionnaire,Integer id,String questionText,HttpServletRequest request) {
+		System.out.println("going in insert choice");
 		Integer maxChoices = (Integer)request.getSession().getAttribute("choices");
-		List<String> choices = new ArrayList<String>();
+		Boolean exclusive = false;
+		String attributeName = String.valueOf(id) + "-choice-x"; 
+		if(request.getParameter(attributeName) != null)
+			exclusive = true;
+		List<String> choicesList = new ArrayList<String>();
 		for(int j = 0; j < maxChoices; ++j) {
-			String attributeName = String.valueOf(id) + "-choice" + String.valueOf(j);
+			System.out.println("cycling for choices");
+			attributeName = String.valueOf(id) + "-choice-" + String.valueOf(j);
+			System.out.println("searching for choice  " + attributeName);
 			String questionChoice = (String)request.getParameter(attributeName);
 			if (questionChoice != null) {
-				choices.add(questionChoice);
+				System.out.println("Saving choice " + questionChoice);
+				choicesList.add(questionChoice);
 			}
 		}
 		request.getSession().removeAttribute("choices");
-		QuestionWrapper choiceQuestion = new QuestionWrapper(questionText,false,null,null,choices);
+		QuestionWrapper choiceQuestion = new QuestionWrapper(questionText,false,exclusive,null,choicesList);
 		marketingQuestionnaire.add(choiceQuestion);
 		return marketingQuestionnaire;
 	}
