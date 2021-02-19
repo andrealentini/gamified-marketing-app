@@ -18,15 +18,28 @@ public class QuestionnaireModel implements Serializable {
 	
 	private Date questionnaireDate;
 	
+	private Integer productId;
+	
 
-	public QuestionnaireModel(String productName,Date questionnaireDate) {
+	public QuestionnaireModel(String productName,Date questionnaireDate,Integer productId) {
 		this.usersModel = new ArrayList<UserModel>();
 		this.productName = productName;
 		this.questionnaireDate = questionnaireDate;
+		this.productId = productId;
 		
 		
 	}
 	
+
+	public Integer getProductId() {
+		return productId;
+	}
+
+
+	public void setProductId(Integer productId) {
+		this.productId = productId;
+	}
+
 
 	public String getProductName() {
 		return productName;

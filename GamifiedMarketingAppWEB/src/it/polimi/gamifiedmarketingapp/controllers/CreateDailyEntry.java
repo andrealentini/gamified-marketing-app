@@ -46,6 +46,7 @@ public class CreateDailyEntry extends AbstractController {
 		}
 		String productName = (String)request.getParameter("productName");
 		Integer statisticalSectionId = getStatisticalQuestionnaire(request);
+		System.out.println("Entering processMarketingQuestionnaire");
 		List<QuestionWrapper> marketingQuestions = processMarketinQuestionnaire(request);
 		try {
 			facadeService.createDailyEntry(date, productName, null , statisticalSectionId, marketingQuestions);
@@ -54,7 +55,10 @@ public class CreateDailyEntry extends AbstractController {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error in creating the product: " + e.getMessage());
 			return;
 		}
-		
+		String path = "/WEB-INF/Response.html";
+		process(request, response, path,
+				new String[] {"response"},
+				new Object[] {true});
 		
 	}
 	
@@ -64,12 +68,15 @@ public class CreateDailyEntry extends AbstractController {
 		//In case it is choice i have to iterate on the maxnumber of questions and check for the presence of the attribute
 		//In case of null i have to ignore it otherwise i have to put it in the list
 		Integer questionNumber = (Integer)request.getSession().getAttribute("questionNumber");
+		System.out.println("questionNumber:" + String.valueOf(questionNumber));
 		List<QuestionWrapper> marketingQuestionnaire = new ArrayList<QuestionWrapper>();
 		String[] types = {"t","r","c"};
 		for(int i = 0; i < questionNumber; ++i) {
 			for(String type : types){
-				String attributeName = String.valueOf(i) + "-text" + type;
+				String attributeName = String.valueOf(i) + "-text-" + type;
+				System.out.println("searching for: " + String.valueOf(attributeName));
 				String questionText = (String)request.getParameter(attributeName);
+				System.out.println("questionText:" + questionText);
 				if(questionText != null) {
 					//Check the type
 					if(type == "t")
@@ -81,6 +88,7 @@ public class CreateDailyEntry extends AbstractController {
 				}
 			}
 		}
+		request.getSession().removeAttribute("questionNumber");
 		return marketingQuestionnaire;
 	}
 	
@@ -96,8 +104,9 @@ public class CreateDailyEntry extends AbstractController {
 	}
 	//String text, Boolean optional, Boolean multipleChoicesSupport, Integer upperBound, List<String> choices
 	private List<QuestionWrapper> insertTextQuestion(List<QuestionWrapper> marketingQuestionnaire,Integer id,String questionText,HttpServletRequest request) {
-		QuestionWrapper textQuestion = new QuestionWrapper(questionText,null,null,null,null);
+		QuestionWrapper textQuestion = new QuestionWrapper(questionText,false,null,null,null);
 		marketingQuestionnaire.add(textQuestion);
+		System.out.println("Added textQuestion " + questionText);
 		return marketingQuestionnaire;
 	}
 	
@@ -119,6 +128,7 @@ public class CreateDailyEntry extends AbstractController {
 				choices.add(questionChoice);
 			}
 		}
+		request.getSession().removeAttribute("choices");
 		QuestionWrapper choiceQuestion = new QuestionWrapper(questionText,null,null,null,choices);
 		marketingQuestionnaire.add(choiceQuestion);
 		return marketingQuestionnaire;

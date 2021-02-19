@@ -1,7 +1,8 @@
 package it.polimi.gamifiedmarketingapp.controllers;
 
 import java.io.IOException;
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -88,17 +89,19 @@ public class DeleteQuestionnaire extends AbstractController {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//TODO: Check this condition
-		Date date = (Date)request.getSession().getAttribute("date");
-		Calendar today = Calendar.getInstance();
-		Date todayDate = today.getTime();
-		DateComparator comparator = DateComparator.getInstance();
-		if(comparator.compare(todayDate,date) == 1) {
+		Integer productId = Integer.parseInt(request.getParameter("productId"));
+		Date date = dataService.getMasterQuestionnaire(productId).getProduct().getDate();
+		try {
 			facadeService.deleteDailyEntry(date);
-		}else {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Can only delete questionnaires with date older than today");
+		}catch(Exception e1) {
+			e1.printStackTrace();
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error in creating the product: " + e1.getMessage());
+			return;
 		}
-		//TODO: Check if needing a response, maybe triggering a new get request from the user
+		String path = "/WEB-INF/Response.html";
+		process(request, response, path,
+				new String[] {"response"},
+				new Object[] {true});
 	}
 	
 	private List<QuestionnaireModel> getQuestionnaireModels(List<MasterQuestionnaire> masterQuestionnaires){
@@ -112,7 +115,7 @@ public class DeleteQuestionnaire extends AbstractController {
 	private QuestionnaireModel getQuestionnaireModel(MasterQuestionnaire masterQuestionnaire) {
 		List<Filling> fillings = dataService.getFillings(masterQuestionnaire.getId());
 		QuestionnaireModel questionnaireModel = new QuestionnaireModel
-				(masterQuestionnaire.getProduct().getName(), masterQuestionnaire.getProduct().getDate());
+				(masterQuestionnaire.getProduct().getName(), masterQuestionnaire.getProduct().getDate(),masterQuestionnaire.getProduct().getId());
 		questionnaireModel.setUsersModel(getUsers(fillings));
 		return questionnaireModel;
 		
